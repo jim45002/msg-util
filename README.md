@@ -1,5 +1,5 @@
 # Msg Util
-Voice and text messaging utility for the Tor network. This application includes a markup able world map, that transmits users map drawings with voice and text messages. This application was written for Linux and was only run on Ubuntu 16 LTS.  
+Voice, and text messaging utility for the Tor network. This application includes a world map users can markup, and transmits their drawings like voice and text messages. Using msg_util makes it easy to send voice, text, map drawings to anyone on the Tor network. All voice, text, and map markups are transmitted over the Tor network via the msg_util hidden service. This application was written for Linux and was only run on Ubuntu 16 LTS. Until this README file is updated, if you need help building and running the source code contact teamplayer21@tutanota.com.  
 
 
 ![Alt text](./resources/msg_util_gui.png?raw=true "Torrc Utility")
