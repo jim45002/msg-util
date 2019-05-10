@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/map/theme">
+        <file>openstreetmap.dgml</file>
+    </qresource>
+</RCC>
