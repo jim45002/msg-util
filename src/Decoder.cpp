@@ -70,7 +70,8 @@ Decoder::Decoder(QDataStream& inputFrames, QObject *parent) :
                     out[i]=output[i];
 
         //Write the decoded audio to file
-        outputBuffer.append(reinterpret_cast<char*>(out.data()), sizeof(short int)*frameSize);
+        outputBuffer.append(reinterpret_cast<char*>(out.data()),
+                            sizeof(short int)*frameSize);
     }
 
     //Destroy the decoder state

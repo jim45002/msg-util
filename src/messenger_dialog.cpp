@@ -180,7 +180,9 @@ void messenger_dialog::timer_timedout()
         {
             if(files.count())
             {
-              ui->statusbar_label->setText("pending text message transmissions");
+              ui->statusbar_label->setText(
+                          "pending text message transmissions"
+                          );
             }
             else
             {

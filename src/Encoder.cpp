@@ -40,7 +40,8 @@ Encoder::Encoder(QDataStream& inputFrames, QObject *parent) :
     {
         /* Read a 16 bits/sample audio frame */
 
-        inputFrames.readRawData(reinterpret_cast<char*>(in.data()),sizeof(short int)*frameSize);
+        inputFrames.readRawData(reinterpret_cast<char*>(in.data()),
+                                sizeof(short int)*frameSize);
 
         if(inputFrames.atEnd())
                            break;

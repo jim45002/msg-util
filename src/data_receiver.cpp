@@ -14,7 +14,9 @@ data_receiver::data_receiver(QObject* p) : data_receiver_interface (p)
     tcp_server = std::make_shared<QTcpServer>();
     tcp_server->listen(QHostAddress::Any,1024);
 
-    qDebug() << "creating " << std::thread::hardware_concurrency() << " threads";
+    qDebug() << "creating "
+             << std::thread::hardware_concurrency()
+             << " threads";
     for(unsigned int i=0;i<std::thread::hardware_concurrency()-1;++i)
     {
         auto thr = std::make_shared<reader_work_thread>(nullptr);
