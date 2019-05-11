@@ -27,7 +27,6 @@ public:
               myPenColor(pen_color),
               font(f)
         {
-
         }
 
         QColor get_color() { return myPenColor; }
@@ -54,7 +53,6 @@ public:
               myPenColor(pen_color),
               line(l)
         {
-
         }
 
         QColor get_color() { return myPenColor; }

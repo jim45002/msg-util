@@ -1,4 +1,7 @@
 
+#include <chrono>
+#include <thread>
+
 #include <QDebug>
 #include <QDir>
 #include <QByteArray>
@@ -67,48 +70,34 @@ void audio_buffer_device::new_buffer_data(char *data, qint64 maxLen)
    writeData(data,maxLen);
 }
 
-qint64 audio_buffer_device::readData(char *data, qint64 maxSize)
+qint64 audio_buffer_device::readData(char *, qint64 )
 {
-   double x[data_size],y[data_size];
-   if(maxSize>data_size)
-       maxSize=data_size;
-   memset(x,'\0',sizeof(x));
-   memset(y,'\0',sizeof(y));
-   for(int i=0;i<maxSize;++i)
-   {
-       x[i] = i;
-       y[i] = abs(*data);
-       ++data;
-   }
-   curve.setRawSamples(x,y,maxSize);
-   curve.setPen( QPen(Qt::black,1));
-   curve.setRenderHint(QwtPlotItem::RenderAntialiased,true);
-   curve.attach(plot_widget);
-   plot_widget->replot();
-   audio_data.clear();
-   return maxSize;
+  return 0;
 }
 
 qint64 audio_buffer_device::writeData(const char *data, qint64 maxSize)
 {
 
-//    double x[data_size],y[data_size];
-//    if(maxSize>data_size)
-//        maxSize=data_size;
-//    memset(x,'\0',sizeof(x));
-//    memset(y,'\0',sizeof(y));
-//    for(int i=0;i<maxSize;++i)
-//    {
-//        x[i] = i;
-//        y[i] = abs(*data);
-//        ++data;
-//    }
-//    curve.setRawSamples(x,y,maxSize);
-//    curve.setPen( QPen(Qt::black,1));
-//    curve.setRenderHint(QwtPlotItem::RenderAntialiased,true);
-//    curve.attach(plot_widget);
-//    plot_widget->replot();
-//    audio_data.clear();
+    double x[data_size],y[data_size];
+
+    if(maxSize>data_size)
+        maxSize=data_size;
+    memset(x,0,sizeof(x));
+    memset(y,0,sizeof(y));
+
+    for(int i=0;i<maxSize;++i)
+    {
+        x[i] = i;
+        y[i] = *data;
+        ++data;
+    }
+
+    curve.setSamples(x,y,static_cast<int>(data_size));
+    curve.setPen( QPen(Qt::darkGreen,1));
+    curve.setStyle(QwtPlotCurve::Lines);
+    curve.setRenderHint(QwtPlotItem::RenderAntialiased,true);
+    curve.attach(plot_widget);
+    plot_widget->replot();
     return maxSize;
 }
 
@@ -120,8 +109,7 @@ qint64 audio_buffer_device::readLineData(char *, qint64 )
 
 void audio_buffer_device::stop_audio_write()
 {
-    audio_reader->set_should_stop_running(true);
-    audio_reader->wait();
+    audio_reader->set_should_stop_running(true);   
 }
 
 void audio_buffer_device::save_voice_message()

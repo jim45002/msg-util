@@ -11,7 +11,7 @@ class audio_read_thread : public QThread
 {
     Q_OBJECT
 public:
-    audio_read_thread(unsigned int buffer_size,QObject *parent);
+    audio_read_thread(unsigned int, QObject *parent);
     virtual ~audio_read_thread();
 
     virtual void run();
@@ -25,8 +25,6 @@ public slots:
 
 private:
     bool should_stop_running;
-    const unsigned int buffer_length;
-
 };
 
 #endif // AUDIO_READ_THREAD_H

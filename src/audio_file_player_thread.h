@@ -14,11 +14,15 @@ class QAudioOutput;
 
 class audio_file_player_thread : public QThread
 {
+    Q_OBJECT
 public:
     audio_file_player_thread(audio_buffer_device *abd, QObject *parent);
     virtual ~audio_file_player_thread();
     bool is_completed() { return (isRunning() == false); }
     virtual void run();
+
+signals:
+   void new_buffer_data(char* data, qint64 maxLen);
 
 private:
     QDir directory;

@@ -97,7 +97,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QWidget" name="incoming_plot_widget" native="true"/>
+             <widget class="QWidget" name="incoming_plot_widget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="outgoing_plot_label">
@@ -113,7 +120,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QWidget" name="outgoing_plot_widget" native="true"/>
+             <widget class="QWidget" name="outgoing_plot_widget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label">
@@ -1088,6 +1102,13 @@
                 <number>1</number>
                </property>
                <item>
+                <widget class="QPushButton" name="insert_connections_pushButton">
+                 <property name="text">
+                  <string>Insert Connections</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QListWidget" name="connections_listwidget">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1095,11 +1116,6 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string>uuydgvo3fkxlwjfjbibdyaofavnvfqhlza5njju2d5fzqngx2bhildad.onion</string>
-                  </property>
-                 </item>
                 </widget>
                </item>
               </layout>
@@ -1193,19 +1209,19 @@
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_2">
-                 <property name="text">
-                  <string>Transmit Scribble</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QCheckBox" name="enable_scribble_checkBox">
                  <property name="text">
                   <string>Enable Scribble</string>
                  </property>
                  <property name="checked">
                   <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="transmit_scribble_pushButton">
+                 <property name="text">
+                  <string>Transmit Scribble</string>
                  </property>
                 </widget>
                </item>

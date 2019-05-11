@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <qwt_plot_curve.h>
+
 #include <QFile>
 #include <QDialog>
 
@@ -32,6 +34,9 @@ public:
     ~messenger_dialog();
 
     QwtPlot *create_plot_widget(QWidget *);
+    void clear_outgoing_plot();
+    void clear_incoming_plot();
+    void save_map_markup();
 public slots:
     void voice_transmit_button_pressed();
     void voice_transmit_button_released();
@@ -40,6 +45,8 @@ public slots:
     void timer_timedout();
 
     void enable_scribble_clicked(bool);
+    void insert_connections_button(bool);
+    void transmit_sribble_clicked(bool);
 private:
     Ui::messenger_dialog *ui;    
     QList<data_transmitter*> data_trans_list;
@@ -47,9 +54,10 @@ private:
     std::shared_ptr<map_widget_interface> mwfi;
     std::shared_ptr<audio_buffer_device> audio_buffer;
     std::shared_ptr<audio_buffer_device> incoming_audio_buffer;
-    std::shared_ptr<audio_file_player_thread> audio_file_thread;
+    std::shared_ptr<audio_file_player_thread> aud_file_player_thread;
     QwtPlot* incoming_plot;
     QwtPlot* outgoing_plot;
+    QwtPlotCurve curve;
     QFile incoming_voice_file;
 
 };

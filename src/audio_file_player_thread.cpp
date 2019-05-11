@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QProcess>
+#include <QFile>
 
 #include "audio_buffer_device.h"
 #include "audio_file_player_thread.h"
@@ -37,11 +38,27 @@ void audio_file_player_thread::run()
     {
         QString commamd = "/usr/bin/aplay";
         QStringList args;
-        args << "-f" << "S16_LE" <<
-                QString("./incoming_voice_data/")+file;
-        QProcess audio_process(this);
+        args << "-f"
+             << "S16_LE"
+             << QString("./incoming_voice_data/")+file;
+        QProcess audio_process;
         audio_process.start(commamd,args);
-        audio_process.waitForFinished(-1);
+
+        QFile infile(args[2]);
+        QByteArray buff;
+        if(infile.open(QIODevice::ReadOnly))
+        while(!infile.atEnd())
+        {
+            buff += infile.read(128-buff.length());
+            if(buff.length()<128)
+                continue;
+            emit new_buffer_data(buff.data(),buff.length());
+            buff.clear();
+        }
+        if(!audio_process.waitForFinished(3000))
+        {
+            audio_process.kill();
+        }
         QFile::remove(QString("./incoming_voice_data/")+file);
     }
 }

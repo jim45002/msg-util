@@ -3,7 +3,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QTimer>
-
+#include <QFileDialog>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -27,7 +27,7 @@ messenger_dialog::messenger_dialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    audio_file_thread =
+    aud_file_player_thread =
             std::make_shared<audio_file_player_thread>
             (nullptr,nullptr);
 
@@ -37,10 +37,10 @@ messenger_dialog::messenger_dialog(QWidget *parent) :
     dir.mkdir(QString("./incoming_voice_data"));
     dir.mkdir(QString("./incoming_text_data"));
 
-    ui->incoming_plot_label->hide();
-    ui->outgoing_plot_label->hide();
-    ui->outgoing_plot_widget->hide();
-    ui->incoming_plot_widget->hide();
+//    ui->incoming_plot_label->hide();
+//    ui->outgoing_plot_label->hide();
+//    ui->outgoing_plot_widget->hide();
+//    ui->incoming_plot_widget->hide();
 
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),
@@ -101,6 +101,10 @@ messenger_dialog::messenger_dialog(QWidget *parent) :
                                           ui->outgoing_doubleSpinBox,
                                           ui->incoming_doubleSpinBox,                                                                                   
                                           nullptr);
+    connect(aud_file_player_thread.get(),
+            SIGNAL(new_buffer_data(char*,qint64)),
+            incoming_audio_buffer.get(),
+            SLOT(new_buffer_data(char*,qint64)));
 
     incoming_audio_buffer->open(QIODevice::ReadOnly);
 
@@ -108,6 +112,19 @@ messenger_dialog::messenger_dialog(QWidget *parent) :
     timer->setInterval(10000);
     connect(timer,SIGNAL(timeout()),this,SLOT(timer_timedout()));
     timer->start();
+
+    connect(ui->insert_connections_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(insert_connections_button(bool)));
+
+    connect(ui->transmit_scribble_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(transmit_sribble_clicked(bool)));
+
+    clear_outgoing_plot();
+    clear_incoming_plot();
 }
 
 messenger_dialog::~messenger_dialog()
@@ -115,6 +132,47 @@ messenger_dialog::~messenger_dialog()
     delete ui;
 }
 
+
+void messenger_dialog::transmit_sribble_clicked(bool)
+{
+    qDebug() << "scribble transmit clicked";
+    auto items = ui->connections_listwidget->selectedItems();
+    if(items.count()==1)
+    {
+      data_transmitter* dt = new data_transmitter(items[0]->text());
+      data_trans_list.push_back(dt);
+      ui->statusbar_label->setText("transmitting scribble");
+    }
+    else
+    {
+      qDebug() << "unable to determine receiver address";
+       ui->statusbar_label->setText
+               ("unable to determine receiver address - select a connection");
+    }
+
+}
+
+void messenger_dialog::save_map_markup()
+{
+
+}
+
+void messenger_dialog::insert_connections_button(bool)
+{
+    QFileDialog fileDialog(this);
+    QString filename = fileDialog.getOpenFileName();
+    QFile connections_file(filename);
+    if(connections_file.open(QIODevice::ReadOnly))
+    {
+        ui->connections_listwidget->clear();
+        while(!connections_file.atEnd())
+        {
+            QByteArray line = connections_file.readLine(256).trimmed();
+            if(line.length())
+               ui->connections_listwidget->addItem(QString(line));
+        }
+    }
+}
 
 void messenger_dialog::enable_scribble_clicked(bool)
 {
@@ -124,7 +182,6 @@ void messenger_dialog::enable_scribble_clicked(bool)
     }
     else
     {
-       // mwfi->map_disable_scibble();
         mwfi->map_enable_scibble(false);
     }
 }
@@ -210,7 +267,8 @@ void messenger_dialog::timer_timedout()
         }
         else
         {
-          ui->statusbar_label->setText("no pending voice transmissions");
+           ui->statusbar_label->setText(" ");
+           clear_outgoing_plot();
         }
     };
 
@@ -228,7 +286,12 @@ void messenger_dialog::timer_timedout()
 
         if(files.count())
         {
-          ui->statusbar_label->setText("incoming voice message");
+           ui->statusbar_label->setText("incoming voice message");
+        }
+        else
+        {
+           clear_incoming_plot();
+           ui->statusbar_label->setText(" ");
         }
     };
 
@@ -238,7 +301,7 @@ void messenger_dialog::timer_timedout()
     incoming_voice_check();
     outgoing_voice_check();
     post_text_data();
-    audio_file_thread->start();
+    aud_file_player_thread->start();
 }
 
 void messenger_dialog::voice_transmit_button_pressed()
@@ -250,6 +313,7 @@ void messenger_dialog::voice_transmit_button_pressed()
 void messenger_dialog::voice_transmit_button_released()
 {
    qDebug() << "voice_transmit released";
+   clear_outgoing_plot();
    audio_buffer->stop_audio_write();
    auto items = ui->connections_listwidget->selectedItems();
    if(items.count()==1)
@@ -265,6 +329,20 @@ void messenger_dialog::voice_transmit_button_released()
               ("unable to determine receiver address - select a connection");
    }
 
+}
+
+void messenger_dialog::clear_outgoing_plot()
+{
+    char y[128];
+    memset(y,0,sizeof(y));
+    audio_buffer->writeData(y,sizeof(y));
+}
+
+void messenger_dialog::clear_incoming_plot()
+{
+    char y[128];
+    memset(y,0,sizeof(y));
+    incoming_audio_buffer->writeData(y,sizeof(y));
 }
 
 ////////////////
@@ -317,7 +395,7 @@ void messenger_dialog::text_transmit_button_released()
 QwtPlot* messenger_dialog::create_plot_widget(QWidget* parent)
 {
     QwtPlot* plot = new QwtPlot(parent);
-    plot->setAxisScale( QwtPlot::yLeft, 0,128 );
+    plot->setAxisScale( QwtPlot::yLeft, -128,128 );
     plot->setAxisScale( QwtPlot::xBottom, 0.0, 128);
 
     auto layout = new QHBoxLayout;

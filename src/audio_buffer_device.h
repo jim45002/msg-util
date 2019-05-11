@@ -46,7 +46,6 @@ private:
     QwtPlotCurve curve;
     QDoubleSpinBox* in_spinbox;
     QDoubleSpinBox* out_spinbox;
-    QByteArray audio_data;
     double average;
     double sum;
     double counter;
