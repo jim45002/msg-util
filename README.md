@@ -6,7 +6,8 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 
 
 # Build Instructions
-This source code was built using the cmake build tool. How to build and usage instructions will be added to this repository soon. If you would like to build and run the application and have questions contact the Bitmessage address BM-2cWzE6TNpMDuaA9ZcLubBfxderyTsnKQ8n with any questions.
+This source code was built using the cmake build tool. How to build and usage instructions will be added to this repository soon. If you would like to build and run the application and have questions contact the Bitmessage address BM-2cWzE6TNpMDuaA9ZcLubBfxderyTsnKQ8n with any questions. This is a new repository so, please be patient.
+
 
 
 
