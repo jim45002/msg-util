@@ -266,10 +266,7 @@ void messenger_dialog::enable_scribble_clicked(bool)
 
 void messenger_dialog::timer_timedout()
 {
-    qDebug() << "timer timeout ";
     auto post_map_markup_data = [this]() {
-
-        qDebug() << "post_map_markup_data";
 
         QDir directory;
         directory.setFilter(QDir::Files);
@@ -601,7 +598,6 @@ void messenger_dialog::timer_timedout()
 
 void messenger_dialog::voice_transmit_button_pressed()
 {
-   qDebug() << "voice_transmit pressed";
    audio_buffer->start_audio_read();
 }
 
