@@ -288,7 +288,6 @@ void messenger_dialog::timer_timedout()
 
         for(auto file : files)
         {
-            qDebug() << " for(auto ... ";
 
             QString filename(QString("./incoming_map_markup_data/")+file);
 
@@ -308,7 +307,6 @@ void messenger_dialog::timer_timedout()
             {
 
                 filename = filename.remove(".bz2");
-                qDebug() << "opening " << filename;
 
                 QFile map_markup_file(filename);
                 if(map_markup_file.open(QIODevice::ReadOnly))

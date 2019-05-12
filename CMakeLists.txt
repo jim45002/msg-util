@@ -18,7 +18,8 @@ include_directories(
 
 link_directories( ../../libs/qwt/build/lib
                   ../../libs/speex-1.2
-                  ../../libs/speex-1.2/libspeex/.libs)
+                  ../../libs/speex-1.2/libspeex/.libs
+                  ./libs/map_widget_factory/build)
 
 set(SOURCE_DIR ./src)
 
