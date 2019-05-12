@@ -8,8 +8,8 @@
 
 markup_data_packet::markup_data_packet(QByteArray& bytes)
 {
-    filename = QString("markup_data_") +
-            QDateTime::currentDateTime().toString() + QString(".dat");
+    filename = QString("./incoming_map_markup_data/markup_data_") +
+            QDateTime::currentDateTime().toString() + QString(".bz2");
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly))
     {

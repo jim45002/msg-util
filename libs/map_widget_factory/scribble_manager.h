@@ -34,7 +34,38 @@ public:
         QPoint get_point() { return point; }
         QFont get_font() { return font; }
         unsigned int get_width() { return myPenWidth; }
+        QByteArray get_packed_data_buffer()
+        {
+            QByteArray buff;
+            int text_size = text.length();
+            buff.append(reinterpret_cast<char*>(&text_size),sizeof (int));
+            buff.append(text.toStdString().c_str(),text.length());
 
+            int rx = point.rx();
+            int ry = point.ry();
+            int x = point.x();
+            int y = point.y();
+            buff.append(reinterpret_cast<char*>(&rx),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&ry),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&x),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&y),sizeof (int));
+
+            int red = myPenColor.red();
+            int green = myPenColor.green();
+            int blue = myPenColor.blue();
+            buff.append(reinterpret_cast<char*>(&red),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&green),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&blue),sizeof (int));
+
+            QString font_family = font.family();
+            text_size = font_family.size();
+            buff.append(reinterpret_cast<char*>(&text_size),sizeof (int));
+            buff.append(font_family.toStdString().c_str(),font_family.size());
+
+            buff.append(reinterpret_cast<char*>(&myPenWidth),
+                        sizeof(unsigned int));
+            return buff;
+        }
    private:
         QString text;
         QPoint point;
@@ -58,6 +89,31 @@ public:
         QColor get_color() { return myPenColor; }
         QLine get_line() { return line; }
         unsigned int get_width() { return myPenWidth; }
+        QByteArray get_packed_data_buffer()
+        {
+            QByteArray buff;
+
+            int red = myPenColor.red();
+            int green = myPenColor.green();
+            int blue = myPenColor.blue();
+            buff.append(reinterpret_cast<char*>(&red),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&green),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&blue),sizeof (int));
+
+            buff.append(reinterpret_cast<char*>(&myPenWidth),
+                        sizeof(unsigned int));
+
+            int x1 = line.x1();
+            int x2 = line.x2();
+            int y1 = line.y1();
+            int y2 = line.y2();
+            buff.append(reinterpret_cast<char*>(&x1),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&x2),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&y1),sizeof (int));
+            buff.append(reinterpret_cast<char*>(&y2),sizeof (int));
+
+            return buff;
+        }
 
      private:
         unsigned int myPenWidth;
@@ -94,7 +150,22 @@ public:
     qreal get_unit_click_lon() { return unit_click_lon; }
     qreal get_centerLatitude() { return centerLatitude; }
     qreal get_centerLongitude() { return centerLongitude; }
-
+    QList<line_data> get_lines_list_data()
+    {
+        return linesList;
+    }
+    QList<text_data> get_text_list_data()
+    {
+        return textList;
+    }
+    void set_lines_list_data(QList<line_data>& l)
+    {
+        linesList = l;
+    }
+    void set_text_list_data(QList<text_data>& t)
+    {
+        textList = t;
+    }
     void set_current_zoom(int zoom) { current_zoom = zoom; }
     void set_current_distance(int distance) { current_distance = distance; }
     void set_current_tileLevel(int tileLevel) { current_tileLevel = tileLevel; }

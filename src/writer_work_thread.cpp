@@ -65,7 +65,12 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         break;
     case packet_type::t_markup:
     {
-
+        packet_type packet_type = t;
+        int packet_size = b.size();
+        packet.append(reinterpret_cast<char*>(&packet_type),
+                      sizeof(packet_type));
+        packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        packet.append(b.toStdString().c_str(),packet_size);
     }
         break;
     }
@@ -75,6 +80,46 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
 //////////////////////
 void writer_work_thread::ready_write()
 {
+
+    auto send_map_markup_data = [this]() {
+        QDir directory;
+        directory.setFilter(QDir::Files);
+        directory.setPath(QString("./outgoing_map_markup_data"));
+        directory.setSorting(QDir::Time);
+        QStringList name_filter;
+        name_filter << "*.bz2";
+        directory.setNameFilters(name_filter);
+        QStringList files =
+                directory.entryList(QDir::Files,QDir::Time);
+
+        for(auto file : files)
+        {
+            QFile f(QString("./outgoing_map_markup_data/")+file);
+            if(f.open(QIODevice::ReadOnly))
+            {
+                QByteArray bytes = f.readAll();
+                bytes=make_data_packet(bytes,packet_type::t_markup);
+                if(bytes.size())
+                {
+                    socket->write(bytes);
+                    if(socket->waitForBytesWritten(30000))
+                    {
+                        qDebug() << "bytes written ";
+                    }
+                    else
+                    {
+                        qDebug() << "socket error";
+                    }
+                    f.remove();
+                }
+            }
+            else
+            {
+                qDebug() << "unable to open file " << f.fileName();
+            }
+        }
+    };
+
     auto send_voice_data = [this]() {
         QDir directory;
         directory.setFilter(QDir::Files);
@@ -99,7 +144,7 @@ void writer_work_thread::ready_write()
                 if(bytes.size())
                 {
                     socket->write(bytes);
-                    if(socket->waitForBytesWritten(60000))
+                    if(socket->waitForBytesWritten(30000))
                     {
                         qDebug() << "bytes written ";
                     }
@@ -138,7 +183,7 @@ void writer_work_thread::ready_write()
                 if(bytes.size())
                 {
                     socket->write(bytes);
-                    if(socket->waitForBytesWritten(60000))
+                    if(socket->waitForBytesWritten(30000))
                     {
                         qDebug() << "bytes written ";
                     }
@@ -156,6 +201,7 @@ void writer_work_thread::ready_write()
         }
     };
 
+    send_map_markup_data();
     send_text_data();
     send_voice_data();
 }

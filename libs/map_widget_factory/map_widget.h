@@ -29,7 +29,10 @@ public:
     virtual QWidget* map_dispaly_widget();
     virtual void map_enable_scibble(bool status = false);
     virtual void map_disable_scibble();
-
+    virtual map_paint_layer* get_map_widget_paint_layer()
+    {
+        return paint_layer;
+    }
 
 public slots:
     /**

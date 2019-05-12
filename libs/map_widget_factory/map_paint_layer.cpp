@@ -228,7 +228,7 @@ void map_paint_layer::mousePressEvent(QMouseEvent *event)
         qreal lat=0,  lon=0;
         parentWidget->geoCoordinates(lastPoint.x(), lastPoint.y(), lon, lat);
         scribbling = true;
-          qDebug() << "lat " << lat << " " << "lon " << lon;
+         // qDebug() << "lat " << lat << " " << "lon " << lon;
     }
     else
     {

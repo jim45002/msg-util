@@ -71,25 +71,44 @@ void reader_work_thread::ready_read()
                             size << " bytes, read " <<
                             pdata.size() << " bytes from socket";
 
+                bool read_error = false;
+                if(size != pdata.size())
+                {
+                  read_error = true;
+                }
+
                 switch(type)
                 {
                     case packet_type::t_text:
                     {
-                        text_data_packet t(pdata);
-                        text_packets.push_back(t);
-                        process_data_packet(t);
+                       if(!read_error)
+                       {
+                         text_data_packet t(pdata);
+                         text_packets.push_back(t);
+                         process_data_packet(t);
+                       }
                     }
                     break;
                     case packet_type::t_voice:
                     {
-                    voice_data_packet v(pdata);
-                         process_data_packet(v);
+                       if(!read_error)
+                       {
+                          voice_data_packet v(pdata);
+                          process_data_packet(v);
+                       }
                     }
                     break;
                     case packet_type::t_markup:
                     {
-                         markup_data_packet m(pdata);
-                         process_data_packet(m);
+                       if(!read_error)
+                       {
+                           markup_data_packet m(pdata);
+                           process_data_packet(m);
+                       }
+                       else
+                       {
+                           qDebug() << "socket read error ";
+                       }
                     }
                     break;
                     default:
