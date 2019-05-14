@@ -17,8 +17,12 @@ public:
     virtual ~data_transmitter_interface() { }
 
 signals:
+    void send_completed(bool);
+    void status_update(QString);
 
 public slots:
+
+private:
 
 };
 

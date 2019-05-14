@@ -22,6 +22,7 @@
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
 
+#include "data_transmitter_factory_interface.h"
 #include "scribble_manager.h"
 #include "map_paint_layer.h"
 #include "audio_file_player_thread.h"
@@ -29,14 +30,17 @@
 #include "data_receiver.h"
 #include "map_widget_interface.h"
 #include "map_widget_factory.h"
-#include "data_transmitter.h"
 #include "ui_messenger_dialog.h"
 #include "messenger_dialog.h"
 
 
-messenger_dialog::messenger_dialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::messenger_dialog)
+messenger_dialog::messenger_dialog(
+        std::shared_ptr<data_transmitter_factory_interface> dtfi,
+        QWidget *parent
+        )
+    : QDialog(parent),
+      ui(new Ui::messenger_dialog),
+      data_trans_f_inter(dtfi)
 {
     ui->setupUi(this);
 
@@ -151,8 +155,8 @@ void messenger_dialog::transmit_sribble_clicked(bool)
     auto items = ui->connections_listwidget->selectedItems();
     if(items.count()==1)
     {
-      data_transmitter* dt = new data_transmitter(items[0]->text());
-      data_trans_list.push_back(dt);
+      data_transmitter_interface* dti = data_trans_f_inter->create(items[0]->text());
+      data_trans_list.push_back(dti);
       ui->statusbar_label->setText("transmitting scribble");
     }
     else
@@ -609,8 +613,9 @@ void messenger_dialog::voice_transmit_button_released()
    auto items = ui->connections_listwidget->selectedItems();
    if(items.count()==1)
    {
-     data_transmitter* dt = new data_transmitter(items[0]->text());
-     data_trans_list.push_back(dt);
+     data_transmitter_interface* dti =
+             data_trans_f_inter->create(items[0]->text());
+     data_trans_list.push_back(dti);
      ui->statusbar_label->setText("transmitting voice message");
    }
    else
@@ -668,9 +673,9 @@ void messenger_dialog::text_transmit_button_released()
    auto items = ui->connections_listwidget->selectedItems();
    if(items.count()==1)
    {
-     data_transmitter* dt = new
-             data_transmitter(items[0]->text().trimmed());
-     data_trans_list.push_back(dt);
+     data_transmitter_interface* dti =
+             data_trans_f_inter->create(items[0]->text().trimmed());
+     data_trans_list.push_back(dti);
      ui->statusbar_label->setText("transmitting text message");
    }
    else

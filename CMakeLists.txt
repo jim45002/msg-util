@@ -19,7 +19,7 @@ include_directories(
 link_directories( ../../libs/qwt/build/lib
                   ../../libs/speex-1.2
                   ../../libs/speex-1.2/libspeex/.libs
-                  ./libs/map_widget_factory/build)
+                  /home/developer/github/messenger/msg-util/libs/map_widget_factory/build)
 
 set(SOURCE_DIR ./src)
 
@@ -61,7 +61,10 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/Decoder.h"
                       "./src/Decoder.cpp"
                       "./src/audio_read_thread.h"
-                      "./src/audio_read_thread.cpp")
+                      "./src/audio_read_thread.cpp"
+                      "./src/data_transmitter_factory.h"
+                      "./src/data_transmitter_factory.cpp"
+                      "./src/data_transmitter_factory_interface.h")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
