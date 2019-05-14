@@ -8,19 +8,20 @@
 #include <QFile>
 #include <QDialog>
 
+class QMutex;
 class QwtPlot;
 class QFile;
 class QListWidget;
+class QTimer;
+
 class map_widget_interface;
 class tor_config_options_interface;
 class audio_buffer_device;
 class data_transmitter;
 class data_receiver_interface;
 class audio_file_player_thread;
-class QMutex;
 class data_transmitter_factory_interface;
 class data_transmitter_interface;
-class QTimer;
 
 namespace Ui {
 class messenger_dialog;
@@ -30,8 +31,8 @@ class messenger_dialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit messenger_dialog(
-            std::shared_ptr<data_transmitter_factory_interface> dtfi,
+    explicit messenger_dialog(std::shared_ptr<data_transmitter_factory_interface> dtfi,
+            data_receiver_interface* dri,
             QWidget *parent = nullptr
             );
     ~messenger_dialog();
@@ -40,21 +41,22 @@ public:
     void clear_outgoing_plot();
     void clear_incoming_plot();
     void save_map_markup();
+
 public slots:
     void voice_transmit_button_pressed();
     void voice_transmit_button_released();
     void text_transmit_button_pressed();
     void text_transmit_button_released();
     void timer_timedout();
-
     void enable_scribble_clicked(bool);
     void insert_connections_button(bool);
     void transmit_sribble_clicked(bool);
+
 private:
     Ui::messenger_dialog *ui;
     std::shared_ptr<data_transmitter_factory_interface> data_trans_f_inter;
+    data_receiver_interface*  data_recv_inter;
     QList<data_transmitter_interface*> data_trans_list;
-    std::shared_ptr<data_receiver_interface> data_recv_inter;
     std::shared_ptr<map_widget_interface> mwfi;
     std::shared_ptr<audio_buffer_device> audio_buffer;
     std::shared_ptr<audio_buffer_device> incoming_audio_buffer;

@@ -27,7 +27,7 @@
 #include "map_paint_layer.h"
 #include "audio_file_player_thread.h"
 #include "audio_buffer_device.h"
-#include "data_receiver.h"
+#include "data_receiver_interface.h"
 #include "map_widget_interface.h"
 #include "map_widget_factory.h"
 #include "ui_messenger_dialog.h"
@@ -36,11 +36,14 @@
 
 messenger_dialog::messenger_dialog(
         std::shared_ptr<data_transmitter_factory_interface> dtfi,
+        data_receiver_interface* dri,
         QWidget *parent
         )
     : QDialog(parent),
       ui(new Ui::messenger_dialog),
-      data_trans_f_inter(dtfi)
+      data_trans_f_inter(dtfi),
+      data_recv_inter(dri)
+
 {
     ui->setupUi(this);
 
@@ -100,8 +103,6 @@ messenger_dialog::messenger_dialog(
     auto l = new QHBoxLayout;
     ui->map_widget->setLayout(l);
     l->addWidget(mwfi->map_dispaly_widget());
-
-    data_recv_inter = std::make_shared<data_receiver>(nullptr);
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,

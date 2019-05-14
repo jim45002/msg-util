@@ -17,8 +17,9 @@ public:
     virtual ~data_transmitter_interface() { }
 
 signals:
-    void send_completed(bool);
-    void status_update(QString);
+    void send_completed(QString);
+    void connection_status_update(QString);
+    void received_verification(QString);
 
 public slots:
 

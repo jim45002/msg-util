@@ -64,7 +64,10 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/audio_read_thread.cpp"
                       "./src/data_transmitter_factory.h"
                       "./src/data_transmitter_factory.cpp"
-                      "./src/data_transmitter_factory_interface.h")
+                      "./src/data_transmitter_factory_interface.h"
+                      "./src/data_receiver_factory.h"
+                      "./src/data_receiver_factory_interface.h"
+                      "./src/data_receiver_factory.cpp")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets

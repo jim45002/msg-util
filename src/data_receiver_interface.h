@@ -1,6 +1,7 @@
 #ifndef DATA_RECEIVER_INTERFACE_H
 #define DATA_RECEIVER_INTERFACE_H
 
+#include <QString>
 #include <QObject>
 
 class data_receiver_interface : public QObject
@@ -11,6 +12,10 @@ public:
     virtual ~data_receiver_interface() {}
 
 signals:
+    void incoming_connection(QString);
+    void connection_status_updates(QString);
+    void verification_reply_sent(QString);
+    void received_data_status(QString);
 
 public slots:
 
