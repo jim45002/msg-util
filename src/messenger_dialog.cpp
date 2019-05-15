@@ -100,9 +100,11 @@ messenger_dialog::messenger_dialog(
     ui->outgoing_plot_widget->setSizePolicy(outgoing_sizePolicy);
 
     mwfi = map_widget_factory::create(this);
+    mwfi->map_enable_scibble(false);
     auto l = new QHBoxLayout;
     ui->map_widget->setLayout(l);
     l->addWidget(mwfi->map_dispaly_widget());
+
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,
