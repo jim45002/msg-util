@@ -90,6 +90,45 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
 //////////////////////
 void writer_work_thread::ready_write()
 {
+    auto send_image_data = [this] ()
+    {
+        QDir directory;
+        directory.setFilter(QDir::Files);
+        directory.setPath(QString("./outgoing_image_data"));
+        directory.setSorting(QDir::Time);
+        QStringList name_filter;
+        name_filter << "*.bz2";
+        directory.setNameFilters(name_filter);
+        QStringList files =
+                directory.entryList(QDir::Files,QDir::Time);
+
+        for(auto file : files)
+        {
+            QFile f(QString("./outgoing_image_data/")+file);
+            if(f.open(QIODevice::ReadOnly))
+            {
+                QByteArray bytes = f.readAll();
+                bytes=make_data_packet(bytes,packet_type::t_image);
+                if(bytes.size())
+                {
+                    socket->write(bytes);
+                    if(socket->waitForBytesWritten(30000))
+                    {
+                        qDebug() << "image bytes written ";
+                    }
+                    else
+                    {
+                        qDebug() << "socket error";
+                    }
+                    f.remove();
+                }
+            }
+            else
+            {
+                qDebug() << "unable to open file " << f.fileName();
+            }
+        }
+    };
 
     auto send_map_markup_data = [this]() {
         QDir directory;
@@ -114,7 +153,7 @@ void writer_work_thread::ready_write()
                     socket->write(bytes);
                     if(socket->waitForBytesWritten(30000))
                     {
-                        qDebug() << "bytes written ";
+                        qDebug() << "map markup bytes written ";
                     }
                     else
                     {
@@ -211,6 +250,7 @@ void writer_work_thread::ready_write()
         }
     };
 
+    send_image_data();
     send_map_markup_data();
     send_text_data();
     send_voice_data();

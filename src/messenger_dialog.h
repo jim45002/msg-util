@@ -42,10 +42,10 @@ public:
     void clear_outgoing_plot();
     void clear_incoming_plot();
     void save_map_markup();
-
     void save_image_data(QString selected_image_file);
 
 public slots:
+    void image_transmit_button_clicked(bool);
     void add_image_pushButton_clicked(bool);
     void voice_transmit_button_pressed();
     void voice_transmit_button_released();
@@ -57,7 +57,10 @@ public slots:
     void transmit_sribble_clicked(bool);
 
     void next_image_pushButton_clicked(bool);
+    void image_remove_button_clicked(bool);
+    void image_clear_button_clicked(bool);
 private:
+    unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;
     std::shared_ptr<data_transmitter_factory_interface> data_trans_f_inter;
     data_receiver_interface*  data_recv_inter;

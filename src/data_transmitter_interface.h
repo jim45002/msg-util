@@ -15,7 +15,7 @@ class data_transmitter_interface : public QObject
 public:
     data_transmitter_interface(QObject* parent) : QObject(parent) { }
     virtual ~data_transmitter_interface() { }
-
+    virtual bool is_finished() = 0;
 signals:
     void send_completed(QString);
     void connection_status_update(QString);

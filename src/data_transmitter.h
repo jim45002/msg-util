@@ -16,12 +16,14 @@ public:
     explicit data_transmitter(QString receiving_peer, QObject *parent = nullptr);
     virtual ~data_transmitter() { }
 
-    std::shared_ptr<writer_work_thread_interface>
-    find_worker_thread();
+    virtual bool is_finished();
+
+    std::shared_ptr
+    <writer_work_thread_interface> find_worker_thread();
 
 public slots:
-
     void connected_to_host_completed();
+
 private:
     QList<std::shared_ptr
     <writer_work_thread_interface>> work_thread_list;

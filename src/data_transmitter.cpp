@@ -23,17 +23,27 @@ data_transmitter::data_transmitter(QString receiving_peer, QObject *parent)
 
     qDebug() << "creating " << std::thread::hardware_concurrency()
              << " threads";
-    for(unsigned int i=0;i<std::thread::hardware_concurrency()-1;++i)
-    {
-       auto thr = std::make_shared<writer_work_thread>(nullptr);
-       thr->quit();
-       work_thread_list.
-               push_back(thr);
-    }
+
+    auto thr = std::make_shared<writer_work_thread>(nullptr);
+    work_thread_list.push_back(thr);
+
     qDebug() << "connecting to host";
     tcp_socket->connectToHost(receiving_peer_address,80);
 }
 
+bool data_transmitter::is_finished()
+{
+    bool r = true;
+    for(auto iter : work_thread_list)
+    {
+        if(iter->isRunning())
+        {
+            r = false;
+            break;
+        }
+    }
+    return r;
+}
 
 std::shared_ptr<writer_work_thread_interface>
 data_transmitter::find_worker_thread()
@@ -41,7 +51,7 @@ data_transmitter::find_worker_thread()
   std::shared_ptr<writer_work_thread_interface> r = nullptr;
   for(auto iter : work_thread_list)
   {
-      if(!iter->isRunning())//connection_is_null())
+      if(!iter->isRunning())
       {
           r = iter;
           break;

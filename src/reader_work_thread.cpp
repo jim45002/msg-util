@@ -25,8 +25,6 @@ void reader_work_thread::set_params(QTcpSocket* s)
 void reader_work_thread::run()
 {    
     ready_read();
-    //socket->close();
-    //delete socket;
     socket = nullptr;
 }
 
@@ -41,7 +39,7 @@ void reader_work_thread::ready_read()
     }
     else
     {
-        if(socket->waitForReadyRead(60000))
+        if(socket->waitForReadyRead(30000))
         {
             result=true;
         }
@@ -54,7 +52,7 @@ void reader_work_thread::ready_read()
     if(true == result)
     {
         qint64 num_bytes;
-        while((num_bytes=socket->bytesAvailable()))
+       if((num_bytes=socket->bytesAvailable()))
         {
             if(num_bytes>8)
             {
@@ -67,18 +65,39 @@ void reader_work_thread::ready_read()
                 const int size = *reinterpret_cast<const int*>
                         (psize.toStdString().c_str());
 
-                QByteArray pdata = socket->read(size);
+                QByteArray pdata;
+                pdata.resize(size);
+                int num_read = 0;
+                for(int tries=0;(num_read!=size)&&(num_read<size);++tries)
+                {
+                   if(socket->bytesAvailable()>=(size-num_read))
+                   {
+                     num_read +=
+                          socket->read(pdata.data()+num_read,(size-num_read));
+                   }
+                   else
+                   {
+                     qDebug() << "waiting for ready read, " << num_read;
+                     socket->waitForReadyRead(3000);
+                   }
+
+                   if(tries>16)
+                   {
+                     qDebug() << "max attempts to read data";
+                     break;
+                   }
+                }
 
                 qDebug() << "received packet type:"
                          << packet_type(type)
                          << " packet size is "
                          << size
                          << " bytes, read "
-                         << pdata.size()
+                         << num_read
                          << " bytes from socket";
 
                 bool read_error = false;
-                if(size != pdata.size())
+                if(size != num_read)
                 {
                   read_error = true;
                 }

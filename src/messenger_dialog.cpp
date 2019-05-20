@@ -98,6 +98,21 @@ messenger_dialog::messenger_dialog(
             this,
             SLOT(add_image_pushButton_clicked(bool)));
 
+    connect(ui->image_transmit_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(image_transmit_button_clicked(bool)));
+
+    connect(ui->image_remove_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(image_remove_button_clicked(bool)));
+
+    connect(ui->image_clear_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(image_clear_button_clicked(bool)));
+
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
                                     QSizePolicy::Preferred);
@@ -118,7 +133,6 @@ messenger_dialog::messenger_dialog(
     auto l = new QHBoxLayout;
     ui->map_widget->setLayout(l);
     l->addWidget(mwfi->map_dispaly_widget());
-
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,
@@ -163,6 +177,25 @@ messenger_dialog::~messenger_dialog()
     delete ui;
 }
 
+void messenger_dialog::image_transmit_button_clicked(bool)
+{
+    qDebug() << "image transmit pressed";
+    auto items = ui->connections_listwidget->selectedItems();
+    if(items.count()==1)
+    {
+      data_transmitter_interface* dti =
+              data_trans_f_inter->create(items[0]->text());
+      data_trans_list.push_back(dti);
+      ui->statusbar_label->setText("transmitting image");
+    }
+    else
+    {
+      qDebug() << "unable to determine receiver address";
+       ui->statusbar_label->setText
+               ("unable to determine receiver address - select a connection");
+    }
+
+}
 
 void messenger_dialog::add_image_pushButton_clicked(bool)
 {
@@ -185,8 +218,7 @@ void messenger_dialog::add_image_pushButton_clicked(bool)
        ui->outgoing_image_graphics_view->
                setScene(graphics_scene);
        ui->outgoing_image_graphics_view->show();
-
-       save_image_data(filename);;
+       save_image_data(filename);
     }
     else
     {
@@ -196,32 +228,57 @@ void messenger_dialog::add_image_pushButton_clicked(bool)
     }
 }
 
+void messenger_dialog::image_clear_button_clicked(bool)
+{
+    qDebug() << "clear image button clicked";
+    ui->outgoing_image_graphics_view->setScene(nullptr);
+    ui->outgoing_image_graphics_view->show();
+}
+
+void messenger_dialog::image_remove_button_clicked(bool)
+{
+   qDebug() << "remove image button clicked";
+   if(current_graphics_scene_index<graphics_scene_list.count())
+   {
+       ui->incoming_image_graphics_view->setScene(nullptr);
+       ui->incoming_image_graphics_view->show();
+       graphics_scene_list.removeAt(current_graphics_scene_index);
+   }
+}
+
 void messenger_dialog::next_image_pushButton_clicked(bool)
 {
     qDebug() << "next image button clicked ";
-    static int index;
+    static unsigned short int index=0;
     if(index < graphics_scene_list.count())
     {
+       qDebug() << "adding scene to image view";
        ui->incoming_image_graphics_view->
               setScene(graphics_scene_list[index]);
        ui->incoming_image_graphics_view->show();
+
+       QString text = "Incoming Image #" +
+               QString::number(index);
+       ui->incoming_image_label->setText(text);
+       current_graphics_scene_index=index;
        ++index;
     }
     else
     {
-      index=0;
+       qDebug() << "setting index back to zero";
+       index=0;
     }
 }
 
 void messenger_dialog::transmit_sribble_clicked(bool)
 {
-
     save_map_markup();
 
     auto items = ui->connections_listwidget->selectedItems();
     if(items.count()==1)
     {
-      data_transmitter_interface* dti = data_trans_f_inter->create(items[0]->text());
+      data_transmitter_interface* dti =
+              data_trans_f_inter->create(items[0]->text());
       data_trans_list.push_back(dti);
       ui->statusbar_label->setText("transmitting scribble");
     }
@@ -336,6 +393,8 @@ void messenger_dialog::save_image_data(QString selected_image_file)
 
         QByteArray packet;
         packet.append(reinterpret_cast<char*>(&idt),sizeof(image_data_type));
+        int size = data_buffer.size();
+        packet.append(reinterpret_cast<char*>(&size),sizeof(int));
         packet.append(data_buffer);
 
         QString outgoing_filename = "./outgoing_image_data/image_data_" +
@@ -664,44 +723,38 @@ void messenger_dialog::timer_timedout()
                 qDebug() << "killing process "
                          << process.program();
                 process.kill();
-
             }
             else
             {
                 filename = filename.remove(".bz2");
                 QFile image_data_file(filename);
-                if(image_data_file.open(QIODevice::ReadWrite))
+                if(image_data_file.open(QIODevice::ReadOnly))
                 {
                     QByteArray complete_image_data_buffer =
                             image_data_file.readAll();
+                    image_data_file.close();
 
                     if(complete_image_data_buffer.size())
                     {
                         QDataStream data_stream(complete_image_data_buffer);
 
                         QByteArray byte_data;
-                        byte_data.resize(sizeof(char));
-                        data_stream.readRawData(byte_data.data(),sizeof(char));
-                        char image_data_type = *byte_data.data();
+                        byte_data.resize(sizeof(image_data_type));
+                        data_stream.readRawData(byte_data.data(),
+                                                sizeof(image_data_type));
+                        image_data_type image_type =
+                                (image_data_type) *byte_data.data();
 
-                        byte_data.clear();
-                        byte_data.append(
-                                    (complete_image_data_buffer.data() +
-                                     sizeof(char)),
-                                    (complete_image_data_buffer.size() -
-                                     sizeof(char)));
+                        qDebug() << "image type is " << (int)image_type;
 
-                        image_data_file.resize(0);
-                        if(image_data_file.write(byte_data) != byte_data.size())
-                        {
-                            qDebug() << "unable to write file "
-                                     <<  image_data_file.fileName();
-                        }
-                        else
-                        {
-                            image_data_file.close();
+                        byte_data.resize(sizeof(int));
+                        data_stream.readRawData(byte_data.data(),sizeof(int));
+                        int size = *reinterpret_cast<int*>(byte_data.data());
 
-                            switch (image_data_type)
+                        byte_data.resize(size);
+                        data_stream.readRawData(byte_data.data(),size);
+
+                            switch (image_type)
                             {
                             case t_png:
                             {
@@ -726,29 +779,56 @@ void messenger_dialog::timer_timedout()
                             }
                                 break;
 
-                            default:
-                            {
-
-                            }
                             }
 
-                            QPixmap* pixmap = new QPixmap;
-                            QGraphicsScene* graphics_scene =
-                                    new QGraphicsScene(this);
+                            qDebug() << "new image filename is " << filename;
+                            QFile final_image_file(filename);
+                            if(final_image_file.open(QIODevice::WriteOnly))
+                            {
+                                if(final_image_file.write(byte_data) ==
+                                        byte_data.size())
+                                {
+                                  final_image_file.close();
 
-                            if(pixmap->load(filename))
-                            {
-                                graphics_scene->addPixmap(*pixmap);
-                                graphics_scene_list.push_back(graphics_scene);
-                            }
-                            else
-                            {
-                                ui->statusbar_label->setText(
+                                  QPixmap* pixmap = new QPixmap;
+                                  QGraphicsScene* graphics_scene =
+                                      new QGraphicsScene(this);
+
+                                  if(pixmap->load(filename))
+                                  {
+                                    qDebug() << "pushing scene on list";
+                                    graphics_scene->addPixmap(*pixmap);
+                                    graphics_scene_list.push_back(graphics_scene);
+                                  }
+                                  else
+                                  {
+                                     ui->statusbar_label->setText(
                                             QString("unable to open image file")
                                             );
-                            }
-                        }
+                                  }
+                              }
+                              else
+                              {
+                                 qDebug() << "unable to write final image file"
+                                          << final_image_file.fileName();
+                              }
+                           }
+                           else
+                           {
+                              qDebug() << "unable to open final image file"
+                                       << final_image_file.fileName();
+
+                           }
                     }
+                    else
+                    {
+                        qDebug() << "buffer size error on image data ";
+                    }
+                }
+                else
+                {
+                    qDebug() << "unable to open image file"
+                             << image_data_file.fileName();
                 }
             }
         }
@@ -861,8 +941,27 @@ void messenger_dialog::timer_timedout()
         }
     };
 
-    ui->statusbar_label->clear();
+    auto destroy_transmitters = [this] ()
+    {
+       int num_active=0;
+       for(auto iter : data_trans_list)
+       {
+          if(iter->is_finished())
+          {
+              data_trans_f_inter->destroy(iter);
+          }
+          else
+          {
+              ++num_active;
+          }
+       }
+       if(0==num_active)
+       {
+           data_trans_list.clear();
+       }
+    };
 
+    destroy_transmitters();
     process_image_data();
     post_map_markup_data();
     outgoing_text_check();
