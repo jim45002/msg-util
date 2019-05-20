@@ -5,14 +5,17 @@
 
 #include <QThread>
 
+#include "image_data_packet.h"
 #include "text_data_packet.h"
 #include "voice_data_packet.h"
 #include "markup_data_packet.h"
+
 #include "reader_work_thread_interface.h"
 
-class text_data_packet;
-class voice_data_packet;
-class markup_data_packet;
+//class text_data_packet;
+//class image_data_packet;
+//class voice_data_packet;
+//class markup_data_packet;
 
 class QTcpSocket;
 
@@ -31,12 +34,14 @@ public:
     void process_data_packet(const voice_data_packet &data);
     void process_data_packet(const markup_data_packet &data);
 
+    void process_data_packet(const image_data_packet &);
 public slots:
     virtual void ready_read();
 
 private:
 
     QTcpSocket* socket;
+    QList<image_data_packet> image_packets;
     QList<text_data_packet> text_packets;
     QList<voice_data_packet> voice_packets;
     QList<markup_data_packet> markup_packets;

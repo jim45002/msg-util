@@ -5,6 +5,7 @@
 #include "text_data_packet.h"
 #include "voice_data_packet.h"
 #include "markup_data_packet.h"
+#include "image_data_packet.h"
 #include "reader_work_thread.h"
 
 reader_work_thread::reader_work_thread(QObject* p)
@@ -59,17 +60,22 @@ void reader_work_thread::ready_read()
             {
                 QByteArray ptype = socket->read(sizeof (int));
                 QByteArray psize = socket->read(sizeof (int));
+
                 int type = *reinterpret_cast<const int*>
                         (ptype.toStdString().c_str());
+
                 const int size = *reinterpret_cast<const int*>
                         (psize.toStdString().c_str());
+
                 QByteArray pdata = socket->read(size);
 
-                qDebug() << "received packet type:" <<
-                            packet_type(type) <<
-                            " packet size is " <<
-                            size << " bytes, read " <<
-                            pdata.size() << " bytes from socket";
+                qDebug() << "received packet type:"
+                         << packet_type(type)
+                         << " packet size is "
+                         << size
+                         << " bytes, read "
+                         << pdata.size()
+                         << " bytes from socket";
 
                 bool read_error = false;
                 if(size != pdata.size())
@@ -79,42 +85,52 @@ void reader_work_thread::ready_read()
 
                 switch(type)
                 {
-                    case packet_type::t_text:
-                    {
-                       if(!read_error)
-                       {
-                         text_data_packet t(pdata);
-                         text_packets.push_back(t);
-                         process_data_packet(t);
-                       }
-                    }
-                    break;
-                    case packet_type::t_voice:
-                    {
-                       if(!read_error)
-                       {
-                          voice_data_packet v(pdata);
-                          process_data_packet(v);
-                       }
-                    }
-                    break;
-                    case packet_type::t_markup:
-                    {
-                       if(!read_error)
-                       {
-                           markup_data_packet m(pdata);
-                           process_data_packet(m);
-                       }
-                       else
-                       {
-                           qDebug() << "socket read error ";
-                       }
-                    }
-                    break;
-                    default:
-                    {
-                        qDebug() << "packet type not recognized";
-                    }
+                case packet_type::t_image:
+                {
+                   if(!read_error)
+                   {
+                     image_data_packet i(pdata);
+                     image_packets.push_back(i);
+                     process_data_packet(i);
+                   }
+                }
+                break;
+                case packet_type::t_text:
+                {
+                   if(!read_error)
+                   {
+                     text_data_packet t(pdata);
+                     text_packets.push_back(t);
+                     process_data_packet(t);
+                   }
+                }
+                break;
+                case packet_type::t_voice:
+                {
+                   if(!read_error)
+                   {
+                     voice_data_packet v(pdata);
+                     process_data_packet(v);
+                   }
+                }
+                break;
+                case packet_type::t_markup:
+                {
+                   if(!read_error)
+                   {
+                     markup_data_packet m(pdata);
+                     process_data_packet(m);
+                   }
+                   else
+                   {
+                     qDebug() << "socket read error ";
+                   }
+                }
+                break;
+                default:
+                {
+                   qDebug() << "packet type not recognized";
+                }
                 }
             }
         }
@@ -127,6 +143,12 @@ void reader_work_thread::ready_read()
 
 
 ////////////////////
+
+void reader_work_thread::process_data_packet(const image_data_packet& )
+{
+
+}
+
 void reader_work_thread::process_data_packet(const text_data_packet& )
 {
 

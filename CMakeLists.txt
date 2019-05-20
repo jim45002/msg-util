@@ -18,8 +18,7 @@ include_directories(
 
 link_directories( ../../libs/qwt/build/lib
                   ../../libs/speex-1.2
-                  ../../libs/speex-1.2/libspeex/.libs
-                  /home/developer/github/messenger/msg-util/libs/map_widget_factory/build)
+                  ../../libs/speex-1.2/libspeex/.libs)
 
 set(SOURCE_DIR ./src)
 
@@ -67,9 +66,11 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/data_transmitter_factory_interface.h"
                       "./src/data_receiver_factory.h"
                       "./src/data_receiver_factory_interface.h"
-                      "./src/data_receiver_factory.cpp")
+                      "./src/data_receiver_factory.cpp"
+                      "./src/image_data_packet.h"
+                      "./src/image_data_packet.cpp"
+                      "./src/image_data_types.h")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
-                                map_widget_factory qwt speex speexdsp)
-
+                                map_scribble_widget_factory qwt speex speexdsp)

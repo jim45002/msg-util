@@ -29,7 +29,6 @@ data_transmitter::data_transmitter(QString receiving_peer, QObject *parent)
        thr->quit();
        work_thread_list.
                push_back(thr);
-
     }
     qDebug() << "connecting to host";
     tcp_socket->connectToHost(receiving_peer_address,80);

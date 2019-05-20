@@ -7,9 +7,10 @@
 #include <QObject>
 
 #include "packet_types.h"
-#include "text_data_packet.h"
-#include "voice_data_packet.h"
-#include "markup_data_packet.h"
+//#include "text_data_packet.h"
+//#include "voice_data_packet.h"
+//#include "markup_data_packet.h"
+
 #include "writer_work_thread_interface.h"
 
 class text_data_packet;

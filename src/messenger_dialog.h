@@ -22,6 +22,7 @@ class data_receiver_interface;
 class audio_file_player_thread;
 class data_transmitter_factory_interface;
 class data_transmitter_interface;
+class QGraphicsScene;
 
 namespace Ui {
 class messenger_dialog;
@@ -42,7 +43,10 @@ public:
     void clear_incoming_plot();
     void save_map_markup();
 
+    void save_image_data(QString selected_image_file);
+
 public slots:
+    void add_image_pushButton_clicked(bool);
     void voice_transmit_button_pressed();
     void voice_transmit_button_released();
     void text_transmit_button_pressed();
@@ -52,11 +56,13 @@ public slots:
     void insert_connections_button(bool);
     void transmit_sribble_clicked(bool);
 
+    void next_image_pushButton_clicked(bool);
 private:
     Ui::messenger_dialog *ui;
     std::shared_ptr<data_transmitter_factory_interface> data_trans_f_inter;
     data_receiver_interface*  data_recv_inter;
     QList<data_transmitter_interface*> data_trans_list;
+    QList<QGraphicsScene*> graphics_scene_list;
     std::shared_ptr<map_widget_interface> mwfi;
     std::shared_ptr<audio_buffer_device> audio_buffer;
     std::shared_ptr<audio_buffer_device> incoming_audio_buffer;
