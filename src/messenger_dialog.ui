@@ -54,7 +54,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-727</y>
             <width>1166</width>
             <height>1330</height>
            </rect>
@@ -1906,7 +1906,7 @@ color: rgb(2, 2, 2);</string>
                           <string notr="true">color: rgb(255, 255, 255);</string>
                          </property>
                          <property name="text">
-                          <string>Route Configuration Utility</string>
+                          <string>Route Configuration</string>
                          </property>
                         </widget>
                        </item>
