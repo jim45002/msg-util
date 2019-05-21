@@ -54,7 +54,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-131</y>
+            <y>0</y>
             <width>1082</width>
             <height>1330</height>
            </rect>
@@ -1707,7 +1707,8 @@ color: rgb(2, 2, 2);</string>
                              </sizepolicy>
                             </property>
                             <property name="styleSheet">
-                             <string notr="true">background-color: rgb(255, 255, 255);</string>
+                             <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(4, 4, 4);</string>
                             </property>
                            </widget>
                           </item>
@@ -1758,7 +1759,8 @@ color: rgb(2, 2, 2);</string>
                           <item>
                            <widget class="QListWidget" name="listWidget">
                             <property name="styleSheet">
-                             <string notr="true">background-color: rgb(255, 255, 255);</string>
+                             <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(24, 24, 24);</string>
                             </property>
                            </widget>
                           </item>
