@@ -54,8 +54,8 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-727</y>
-            <width>1166</width>
+            <y>-131</y>
+            <width>1082</width>
             <height>1330</height>
            </rect>
           </property>
@@ -1581,6 +1581,13 @@ color: rgb(2, 2, 2);</string>
                       </layout>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox">
+                      <property name="text">
+                       <string>Include Video with Voice Transmission</string>
+                      </property>
+                     </widget>
+                    </item>
                    </layout>
                   </widget>
                  </item>
@@ -1758,72 +1765,81 @@ color: rgb(2, 2, 2);</string>
                          </layout>
                         </widget>
                        </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QFrame" name="frame">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::NoFrame</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_6">
+                       <property name="spacing">
+                        <number>6</number>
+                       </property>
+                       <property name="leftMargin">
+                        <number>9</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>9</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>9</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>9</number>
+                       </property>
                        <item>
-                        <widget class="QFrame" name="frame">
+                        <widget class="QLabel" name="label_6">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
                          </property>
+                         <property name="styleSheet">
+                          <string notr="true">color: rgb(255, 255, 255);</string>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::NoFrame</enum>
                          </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Raised</enum>
+                         <property name="text">
+                          <string>Comm Status</string>
                          </property>
-                         <layout class="QVBoxLayout" name="verticalLayout_6">
-                          <property name="spacing">
-                           <number>1</number>
-                          </property>
-                          <property name="leftMargin">
-                           <number>1</number>
-                          </property>
-                          <property name="topMargin">
-                           <number>6</number>
-                          </property>
-                          <property name="rightMargin">
-                           <number>1</number>
-                          </property>
-                          <property name="bottomMargin">
-                           <number>1</number>
-                          </property>
-                          <item>
-                           <widget class="QLabel" name="label_6">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="styleSheet">
-                             <string notr="true">color: rgb(255, 255, 255);</string>
-                            </property>
-                            <property name="frameShape">
-                             <enum>QFrame::NoFrame</enum>
-                            </property>
-                            <property name="text">
-                             <string>Comm Status</string>
-                            </property>
-                            <property name="scaledContents">
-                             <bool>false</bool>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QListWidget" name="connections_listwidget_2">
-                            <property name="sizePolicy">
-                             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                              <horstretch>0</horstretch>
-                              <verstretch>0</verstretch>
-                             </sizepolicy>
-                            </property>
-                            <property name="styleSheet">
-                             <string notr="true">background-color: rgb(255, 255, 255);</string>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
+                         <property name="scaledContents">
+                          <bool>false</bool>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QListWidget" name="connections_listwidget_2">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>250</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">background-color: rgb(129, 129, 129);</string>
+                         </property>
+                         <property name="frameShape">
+                          <enum>QFrame::StyledPanel</enum>
+                         </property>
                         </widget>
                        </item>
                       </layout>
