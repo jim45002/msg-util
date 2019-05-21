@@ -27,8 +27,16 @@ void reader_work_thread::run()
     socket = nullptr;
 }
 
+//////////////////////
+
+void reader_work_thread::read_packet_data(QByteArray& bytes)
+{
+
+}
+
 
 //////////////////////
+
 void reader_work_thread::ready_read()
 {
     bool result = false;
@@ -54,28 +62,52 @@ void reader_work_thread::ready_read()
        if((num_bytes=socket->bytesAvailable()))
         {
             if(num_bytes>8)
-            {
+            {                
                 QByteArray ptype = socket->read(sizeof (int));
                 QByteArray psize = socket->read(sizeof (int));
 
                 int type = *reinterpret_cast<const int*>
-                        (ptype.toStdString().c_str());
+                        (ptype.data());
 
                 const int size = *reinterpret_cast<const int*>
-                        (psize.toStdString().c_str());
+                        (psize.data());
 
                 QByteArray pdata;
                 pdata.resize(size);
                 long long num_read = 0;
                 for(int tries=0;(num_read!=size)&&(num_read<size);++tries)
                 {
-                   if(socket->bytesAvailable()>=(size-num_read))
+                   if(socket->bytesAvailable())
                    {
-                      long long num = socket->read(pdata.data()+num_read,(size-num_read));
+                      long long num =
+                            socket->read(pdata.data()+num_read,(size-num_read));
+
                       if(num > -1)
                       {
                          num_read += num;
+
                          qDebug() << "num read == " << num_read;
+                         if(num_read>size)
+                         {
+                             qDebug() << "error on read - num_read > size "
+                                      << num_read;
+                             break;
+                         }
+                         else
+                         if(num_read == size)
+                         {
+                             qDebug() << "completed data read - "
+                                      << num_read;
+                             break;
+                         }
+                         else
+                         if(num_read<size)
+                         {
+                             qDebug() << "num_read < size  - size "
+                                      << size
+                                      << ", num_read  "
+                                      << num_read;
+                         }
                       }
                       else
                       {
@@ -116,7 +148,6 @@ void reader_work_thread::ready_read()
                    if(!read_error)
                    {
                      image_data_packet i(pdata);
-                     image_packets.push_back(i);
                      process_data_packet(i);
                    }
                 }
@@ -126,7 +157,6 @@ void reader_work_thread::ready_read()
                    if(!read_error)
                    {
                      text_data_packet t(pdata);
-                     text_packets.push_back(t);
                      process_data_packet(t);
                    }
                 }

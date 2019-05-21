@@ -52,9 +52,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_voice:
@@ -62,9 +62,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();       
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_text:
@@ -72,9 +72,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();                
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_markup:
@@ -82,13 +82,73 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     }
     return packet;
+}
+
+bool writer_work_thread::send_packet_data(QByteArray& bytes)
+{
+    bool result = true;
+
+    if(bytes.size())
+    {
+        long long num_written=0;
+        int tries=0;
+        for(;num_written<bytes.size();++tries)
+        {
+           long long num =
+                   socket->write(bytes.data()+num_written,
+                                 bytes.size()-num_written);
+           if(num > -1)
+           {
+               qDebug() << "wrote " << num << " bytes to socket";
+               num_written += num;
+               if(num_written<bytes.size())
+               {
+                 qDebug() << " num bytes written < size "
+                          << num_written
+                          << " bytes";
+               }
+               else
+               {
+                   if(num_written==bytes.size())
+                   {
+                       qDebug() << "completed data write";
+                       break;
+                   }
+                   else
+                   if(num_written>bytes.size())
+                   {
+                       qDebug() << "num bytes written > buff size";
+                       result = false;
+                       break;
+                   }
+               }
+           }
+           else
+           {
+               qDebug() << "error occured while sending data";
+               result = false;
+           }
+          if(tries>16)
+           {
+               qDebug() << "max send attempts";
+               result = false;
+               break;
+           }
+        }
+    }
+    else
+    {
+        result = false;
+    }
+
+    return result;
 }
 
 //////////////////////
@@ -113,40 +173,9 @@ void writer_work_thread::ready_write()
             {
                 QByteArray bytes = f.readAll();
                 bytes=make_data_packet(bytes,packet_type::t_image);
-                if(bytes.size())
+                if(send_packet_data(bytes))
                 {
-                    long long num_written=0;
-                    int tries=0;
-                    for(;num_written<bytes.size();++tries)
-                    {
-                       long long num =
-                               socket->write(bytes.data()+num_written,
-                                             bytes.size()-num_written);
-                       if(num > -1)
-                       {
-                           qDebug() << "wrote " << num << " bytes to socket";
-                           num_written += num;
-                       }
-                       else
-                       {
-                           qDebug() << "error occured while sending image data";
-                       }
-                       if(socket->waitForBytesWritten(30000))
-                       {
-                           qDebug() << "image bytes written, wrote "
-                                    << num_written << " bytes";
-                       }
-                       else
-                       {
-                           qDebug() << "socket error - bytes not written";
-                       }
-                       if(tries>16)
-                       {
-                           qDebug() << "max send attempts";
-                           break;
-                       }
-                    }
-                    f.remove();
+                   f.remove();
                 }
             }
             else
@@ -176,16 +205,10 @@ void writer_work_thread::ready_write()
                 bytes=make_data_packet(bytes,packet_type::t_markup);
                 if(bytes.size())
                 {
-                    socket->write(bytes);
-                    if(socket->waitForBytesWritten(30000))
+                    if(send_packet_data(bytes))
                     {
-                        qDebug() << "map markup bytes written ";
+                       f.remove();
                     }
-                    else
-                    {
-                        qDebug() << "socket error";
-                    }
-                    f.remove();
                 }
             }
             else
@@ -218,16 +241,10 @@ void writer_work_thread::ready_write()
                 bytes=make_data_packet(bytes,packet_type::t_voice);
                 if(bytes.size())
                 {
-                    socket->write(bytes);
-                    if(socket->waitForBytesWritten(30000))
+                    if(send_packet_data(bytes))
                     {
-                        qDebug() << "bytes written ";
+                       f.remove();
                     }
-                    else
-                    {
-                        qDebug() << "socket error";
-                    }
-                    f.remove();
                 }
             }
             else
@@ -257,17 +274,11 @@ void writer_work_thread::ready_write()
                 bytes=make_data_packet(bytes,packet_type::t_text);
                 if(bytes.size())
                 {
-                    socket->write(bytes);
-                    if(socket->waitForBytesWritten(30000))
+                    if(send_packet_data(bytes))
                     {
-                        qDebug() << "bytes written ";
+                       f.remove();
                     }
-                    else
-                    {
-                        qDebug() << "socket error";
-                    }
-                    f.remove();
-                }
+                 }
             }
             else
             {
@@ -280,6 +291,7 @@ void writer_work_thread::ready_write()
     send_map_markup_data();
     send_text_data();
     send_voice_data();
+
 }
 
 

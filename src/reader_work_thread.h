@@ -35,6 +35,7 @@ public:
     void process_data_packet(const markup_data_packet &data);
 
     void process_data_packet(const image_data_packet &);
+    void read_packet_data(QByteArray &bytes);
 public slots:
     virtual void ready_read();
 
