@@ -120,7 +120,7 @@ void reader_work_thread::ready_read()
                       socket->waitForReadyRead(3000);
                    }
 
-                   if(tries>16)
+                   if(tries>32)
                    {
                       qDebug() << "max attempts to read data";
                       break;

@@ -135,7 +135,7 @@ bool writer_work_thread::send_packet_data(QByteArray& bytes)
                qDebug() << "error occured while sending data";
                result = false;
            }
-          if(tries>16)
+          if(tries>32)
            {
                qDebug() << "max send attempts";
                result = false;
