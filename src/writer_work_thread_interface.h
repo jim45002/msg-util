@@ -14,6 +14,7 @@ public:
     virtual ~writer_work_thread_interface() { }
 
     virtual bool connection_is_null() = 0;
+    virtual bool is_task_completed() = 0;
     virtual void set_params(QTcpSocket* ) = 0;
     virtual void run() = 0;
 

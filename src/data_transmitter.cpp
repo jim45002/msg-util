@@ -8,7 +8,6 @@
 data_transmitter::data_transmitter(QString receiving_peer, QObject *parent)
     : data_transmitter_interface(parent),
       receiving_peer_address(receiving_peer)
-
 {
     network_proxy = new QNetworkProxy(QNetworkProxy::Socks5Proxy,
                                       QString("127.0.0.1"),
@@ -21,9 +20,6 @@ data_transmitter::data_transmitter(QString receiving_peer, QObject *parent)
 
     tcp_socket->setProxy(*network_proxy);
 
-    qDebug() << "creating " << std::thread::hardware_concurrency()
-             << " threads";
-
     auto thr = std::make_shared<writer_work_thread>(nullptr);
     work_thread_list.push_back(thr);
 
@@ -33,12 +29,12 @@ data_transmitter::data_transmitter(QString receiving_peer, QObject *parent)
 
 bool data_transmitter::is_finished()
 {
-    bool r = true;
+    bool r = false;
     for(auto iter : work_thread_list)
     {
-        if(iter->isRunning())
+        if(!iter->isRunning() && iter->is_task_completed())
         {
-            r = false;
+            r = true;
             break;
         }
     }

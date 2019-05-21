@@ -74,6 +74,7 @@ private:
     QwtPlot* outgoing_plot;
     QwtPlotCurve curve;
     QFile incoming_voice_file;
+    QTimer* timer;
 
 };
 

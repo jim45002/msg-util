@@ -153,7 +153,7 @@ messenger_dialog::messenger_dialog(
 
     incoming_audio_buffer->open(QIODevice::ReadOnly);
 
-    QTimer* timer = new QTimer(this);
+    timer = new QTimer(this);
     timer->setInterval(10000);
     connect(timer,SIGNAL(timeout()),this,SLOT(timer_timedout()));
     timer->start();
@@ -180,21 +180,22 @@ messenger_dialog::~messenger_dialog()
 void messenger_dialog::image_transmit_button_clicked(bool)
 {
     qDebug() << "image transmit pressed";
+    timer->stop();
     auto items = ui->connections_listwidget->selectedItems();
     if(items.count()==1)
     {
-      data_transmitter_interface* dti =
+       data_transmitter_interface* dti =
               data_trans_f_inter->create(items[0]->text());
-      data_trans_list.push_back(dti);
-      ui->statusbar_label->setText("transmitting image");
+       data_trans_list.push_back(dti);
+       ui->statusbar_label->setText("transmitting image");
     }
     else
     {
-      qDebug() << "unable to determine receiver address";
+       qDebug() << "unable to determine receiver address";
        ui->statusbar_label->setText
                ("unable to determine receiver address - select a connection");
     }
-
+    timer->start();
 }
 
 void messenger_dialog::add_image_pushButton_clicked(bool)
@@ -308,7 +309,6 @@ void messenger_dialog::save_map_markup()
 
   map_lines_buffer.append(reinterpret_cast<char*>(&count),sizeof(int));
   map_lines_buffer.append(tmp);
-
 
   QByteArray map_text_buffer;
   count=0;
@@ -943,12 +943,14 @@ void messenger_dialog::timer_timedout()
 
     auto destroy_transmitters = [this] ()
     {
+       qDebug() << "checking for finished transmitter";
        int num_active=0;
        for(auto iter : data_trans_list)
        {
           if(iter->is_finished())
           {
-              data_trans_f_inter->destroy(iter);
+              qDebug() << "destroying transmitter";
+             // data_trans_f_inter->destroy(iter);
           }
           else
           {

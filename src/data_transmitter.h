@@ -17,7 +17,6 @@ public:
     virtual ~data_transmitter() { }
 
     virtual bool is_finished();
-
     std::shared_ptr
     <writer_work_thread_interface> find_worker_thread();
 

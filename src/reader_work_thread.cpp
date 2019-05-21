@@ -15,7 +15,6 @@ reader_work_thread::reader_work_thread(QObject* p)
 
 }
 
-
 //////////////////////
 void reader_work_thread::set_params(QTcpSocket* s)
 {
@@ -51,7 +50,7 @@ void reader_work_thread::ready_read()
 
     if(true == result)
     {
-        qint64 num_bytes;
+       qint64 num_bytes;
        if((num_bytes=socket->bytesAvailable()))
         {
             if(num_bytes>8)
@@ -67,24 +66,31 @@ void reader_work_thread::ready_read()
 
                 QByteArray pdata;
                 pdata.resize(size);
-                int num_read = 0;
+                long long num_read = 0;
                 for(int tries=0;(num_read!=size)&&(num_read<size);++tries)
                 {
                    if(socket->bytesAvailable()>=(size-num_read))
                    {
-                     num_read +=
-                          socket->read(pdata.data()+num_read,(size-num_read));
+                      long long num = socket->read(pdata.data()+num_read,(size-num_read));
+                      if(num > -1)
+                      {
+                         num_read += num;
+                      }
+                      else
+                      {
+                         qDebug() << "error occured while reading socket";
+                      }
                    }
                    else
                    {
-                     qDebug() << "waiting for ready read, " << num_read;
-                     socket->waitForReadyRead(3000);
+                      qDebug() << "waiting for ready read, " << num_read;
+                      socket->waitForReadyRead(3000);
                    }
 
                    if(tries>16)
                    {
-                     qDebug() << "max attempts to read data";
-                     break;
+                      qDebug() << "max attempts to read data";
+                      break;
                    }
                 }
 
@@ -152,6 +158,10 @@ void reader_work_thread::ready_read()
                 }
                 }
             }
+        }
+        else
+        {
+           qDebug() << "not enough data sent to socket";
         }
     }
     else

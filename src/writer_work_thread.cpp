@@ -13,6 +13,7 @@
 
 writer_work_thread::writer_work_thread(QObject* parent)
     : writer_work_thread_interface (parent),
+      task_completed(false),
       socket(nullptr)
 {
 
@@ -29,12 +30,15 @@ void writer_work_thread::set_params(QTcpSocket* s)
      socket = s;
 }
 
+bool writer_work_thread::is_task_completed()
+{
+    return task_completed;
+}
+
 void writer_work_thread::run()
 {
     ready_write();
-    //socket->close();
-    //delete socket;
-    socket = nullptr;
+    task_completed=true;
 }
 
 QByteArray writer_work_thread::make_data_packet(const QByteArray b,
@@ -111,14 +115,36 @@ void writer_work_thread::ready_write()
                 bytes=make_data_packet(bytes,packet_type::t_image);
                 if(bytes.size())
                 {
-                    socket->write(bytes);
-                    if(socket->waitForBytesWritten(30000))
+                    long long num_written=0;
+                    int tries=0;
+                    for(;num_written<bytes.size();++tries)
                     {
-                        qDebug() << "image bytes written ";
-                    }
-                    else
-                    {
-                        qDebug() << "socket error";
+                       long long num =
+                               socket->write(bytes.data()+num_written,
+                                             bytes.size()-num_written);
+                       if(num > -1)
+                       {
+                           qDebug() << "wrote " << num << " bytes to socket";
+                           num_written += num;
+                       }
+                       else
+                       {
+                           qDebug() << "error occured while sending image data";
+                       }
+                       if(socket->waitForBytesWritten(30000))
+                       {
+                           qDebug() << "image bytes written, wrote "
+                                    << num_written << " bytes";
+                       }
+                       else
+                       {
+                           qDebug() << "socket error - bytes not written";
+                       }
+                       if(tries>16)
+                       {
+                           qDebug() << "max send attempts";
+                           break;
+                       }
                     }
                     f.remove();
                 }

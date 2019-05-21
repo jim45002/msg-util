@@ -28,6 +28,7 @@ public:
 
     virtual bool connection_is_null() { return (!socket)?true:false; }
     virtual void set_params(QTcpSocket* );
+    virtual bool is_task_completed();
     virtual void run();
     QByteArray make_data_packet(const QByteArray b, packet_type t);
     void process_data_packet(const text_data_packet &data);
@@ -37,6 +38,7 @@ public:
 public slots:
     virtual void ready_write();
 private:
+    bool task_completed;
     QTcpSocket* socket;
     QList<text_data_packet> text_packets;
     QList<voice_data_packet> voice_packets;
