@@ -122,7 +122,6 @@ void reader_work_thread::ready_read()
                    if(!read_error)
                    {
                      image_data_packet i(pdata);
-                     image_packets.push_back(i);
                      process_data_packet(i);
                    }
                 }
@@ -132,7 +131,6 @@ void reader_work_thread::ready_read()
                    if(!read_error)
                    {
                      text_data_packet t(pdata);
-                     text_packets.push_back(t);
                      process_data_packet(t);
                    }
                 }

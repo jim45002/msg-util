@@ -213,7 +213,7 @@ void messenger_dialog::add_image_pushButton_clicked(bool)
     if(pixmap->load(filename))
     {
        QGraphicsScene* graphics_scene =
-               new QGraphicsScene(this);
+               new QGraphicsScene(nullptr);
 
        graphics_scene->addPixmap(*pixmap);
        ui->outgoing_image_graphics_view->
@@ -362,7 +362,7 @@ void messenger_dialog::save_map_markup()
 
 }
 
-
+///////////////////
 void messenger_dialog::save_image_data(QString selected_image_file)
 {
   QFile image_data_file(selected_image_file);
@@ -370,7 +370,7 @@ void messenger_dialog::save_image_data(QString selected_image_file)
   {
     QByteArray data_buffer;
     data_buffer = image_data_file.readAll();
-    if(data_buffer.size())
+    if(data_buffer.size() == image_data_file.size())
     {
         image_data_file.close();
 
@@ -415,12 +415,13 @@ void messenger_dialog::save_image_data(QString selected_image_file)
               if(!process.waitForFinished())
               {
                  process.kill();
-                 qDebug() << "killed process "
-                        << process.program();
+                 qDebug() << "killed compression process "
+                          << process.program();
               }
               else
               {
-                 qDebug() << "created outgoing file";
+                 qDebug() << "created outgoing file"
+                          << outgoing_file.fileName();
               }
            }
            else
@@ -559,13 +560,10 @@ void messenger_dialog::timer_timedout()
                                 data_stream.readRawData(int_bytes,sizeof(int_bytes));
                                 blue = *reinterpret_cast<int*>(int_bytes);
 
-
                                 data_stream.readRawData(unsigned_int_bytes,
                                                         sizeof(unsigned_int_bytes));
                                 myPenWidth = *reinterpret_cast<unsigned int*>
                                         (unsigned_int_bytes);
-
-
 
                                 data_stream.readRawData(int_bytes,sizeof(int_bytes));
                                 x1 =  *reinterpret_cast<int*>(int_bytes);
@@ -720,7 +718,7 @@ void messenger_dialog::timer_timedout()
             process.start(command,args);
             if(!process.waitForFinished())
             {
-                qDebug() << "killing process "
+                qDebug() << "killing decompression process "
                          << process.program();
                 process.kill();
             }
@@ -732,10 +730,12 @@ void messenger_dialog::timer_timedout()
                 {
                     QByteArray complete_image_data_buffer =
                             image_data_file.readAll();
-                    image_data_file.close();
 
-                    if(complete_image_data_buffer.size())
+                    if(complete_image_data_buffer.size() ==
+                            image_data_file.size())
                     {
+                        image_data_file.close();
+
                         QDataStream data_stream(complete_image_data_buffer);
 
                         QByteArray byte_data;
@@ -753,86 +753,95 @@ void messenger_dialog::timer_timedout()
 
                         byte_data.resize(size);
                         data_stream.readRawData(byte_data.data(),size);
-
+                            bool valid_image_type = true;
                             switch (image_type)
                             {
-                            case t_png:
-                            {
-                                QString file(filename);
-                                filename += ".png";
-
-                            }
+                              case t_png:
+                              {
+                                 QString file(filename);
+                                 filename += ".png";
+                              }
                                 break;
 
-                            case t_jpg:
-                            {
+                              case t_jpg:
+                              {
                                 QString file(filename);
                                 filename += ".jpg";
-
-                            }
+                              }
                                 break;
-                            case t_gif:
-                            {
+                              case t_gif:
+                              {
                                 QString file(filename);
                                 filename += ".gif";
-
-                            }
+                              }
                                 break;
-
+                              default:
+                              {
+                                 valid_image_type = false;
+                                 qDebug() << "invalid image type";
+                              }
                             }
 
-                            qDebug() << "new image filename is " << filename;
-                            QFile final_image_file(filename);
-                            if(final_image_file.open(QIODevice::WriteOnly))
+                            if(valid_image_type)
                             {
-                                if(final_image_file.write(byte_data) ==
-                                        byte_data.size())
-                                {
-                                  final_image_file.close();
-
-                                  QPixmap* pixmap = new QPixmap;
-                                  QGraphicsScene* graphics_scene =
-                                      new QGraphicsScene(this);
-
-                                  if(pixmap->load(filename))
-                                  {
-                                    qDebug() << "pushing scene on list";
-                                    graphics_scene->addPixmap(*pixmap);
-                                    graphics_scene_list.push_back(graphics_scene);
-                                  }
-                                  else
-                                  {
-                                     ui->statusbar_label->setText(
-                                            QString("unable to open image file")
-                                            );
-                                  }
-                              }
-                              else
+                              qDebug() << "new image filename is " << filename;
+                              QFile final_image_file(filename);
+                              if(final_image_file.open(QIODevice::WriteOnly))
                               {
-                                 qDebug() << "unable to write final image file"
-                                          << final_image_file.fileName();
-                              }
-                           }
-                           else
-                           {
-                              qDebug() << "unable to open final image file"
-                                       << final_image_file.fileName();
+                                 if(final_image_file.write(byte_data) ==
+                                        byte_data.size())
+                                 {
+                                   final_image_file.close();
 
-                           }
-                    }
-                    else
-                    {
-                        qDebug() << "buffer size error on image data ";
-                    }
-                }
-                else
-                {
-                    qDebug() << "unable to open image file"
-                             << image_data_file.fileName();
-                }
-            }
-        }
-    };
+                                   QPixmap* pixmap = new QPixmap;
+                                   QGraphicsScene* graphics_scene =
+                                       new QGraphicsScene(nullptr);
+
+                                   if(pixmap->load(filename))
+                                   {
+                                     qDebug() << "pushing scene on list";
+                                     graphics_scene->addPixmap(*pixmap);
+                                     graphics_scene_list.
+                                             push_back(graphics_scene);
+                                   }
+                                   else
+                                   {
+                                      ui->statusbar_label->setText(
+                                            QString("unable to open image file")
+                                             );
+                                   }
+                               }
+                               else
+                               {
+                                  qDebug() << "unable to write final image file"
+                                           << final_image_file.fileName();
+                               }
+                            }
+                            else
+                            {
+                               qDebug() << "unable to open final image file"
+                                        << final_image_file.fileName();
+                            }
+                          }
+                          else
+                          {
+                            qDebug() << "not creating file - invalid image type"
+                                     << " for " << filename;
+                          }
+                       }
+                       else
+                       {
+                         qDebug() << "buffer size error on image data ";
+                       }
+                   }
+                   else
+                   {
+                       qDebug() << "unable to open image file"
+                              << image_data_file.fileName();
+                   }
+               }
+          }
+      };
 
     auto post_text_data = [this]() {
         QDir directory;
