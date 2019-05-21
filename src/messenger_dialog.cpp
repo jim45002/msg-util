@@ -390,16 +390,23 @@ void messenger_dialog::save_image_data(QString selected_image_file)
         {
             idt = t_gif;
         }
+        else
+        {
+            qDebug() << "unable to determine image type - not creating image";
+            return;
+        }
+
+        qDebug() << "save image of type " << idt << "sizeof idt "
+                 << sizeof(idt);
 
         QByteArray packet;
-        packet.append(reinterpret_cast<char*>(&idt),sizeof(char));
+        packet.append(reinterpret_cast<char*>(&idt),sizeof(int));
         int size = data_buffer.size();
         packet.append(reinterpret_cast<char*>(&size),sizeof(int));
-        packet.append(data_buffer);
+        packet.append(data_buffer.data(),size);
 
         QString outgoing_filename = "./outgoing_image_data/image_data_" +
-                       (QDateTime::currentDateTime().toString().remove(' ')) +
-                       ".img";
+                       (QDateTime::currentDateTime().toString().remove(' '));
 
         QFile outgoing_file(outgoing_filename);
         if(outgoing_file.open(QIODevice::WriteOnly))
@@ -724,6 +731,7 @@ void messenger_dialog::timer_timedout()
             }
             else
             {
+                //QFile::remove(filename);
                 filename = filename.remove(".bz2");
                 QFile image_data_file(filename);
                 if(image_data_file.open(QIODevice::ReadOnly))
@@ -739,13 +747,13 @@ void messenger_dialog::timer_timedout()
                         QDataStream data_stream(complete_image_data_buffer);
 
                         QByteArray byte_data;
-                        byte_data.resize(sizeof(char));
+                        byte_data.resize(sizeof(int));
                         data_stream.readRawData(byte_data.data(),
-                                                sizeof(char));
+                                                sizeof(int));
                         image_data_type image_type =
                                 (image_data_type) *byte_data.data();
 
-                        qDebug() << "image type is " << (char)image_type;
+                        qDebug() << "image type is " << image_type;
 
                         byte_data.resize(sizeof(int));
                         data_stream.readRawData(byte_data.data(),sizeof(int));

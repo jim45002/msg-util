@@ -27,8 +27,16 @@ void reader_work_thread::run()
     socket = nullptr;
 }
 
+//////////////////////
+
+void reader_work_thread::read_packet_data(QByteArray& bytes)
+{
+
+}
+
 
 //////////////////////
+
 void reader_work_thread::ready_read()
 {
     bool result = false;
@@ -54,7 +62,7 @@ void reader_work_thread::ready_read()
        if((num_bytes=socket->bytesAvailable()))
         {
             if(num_bytes>8)
-            {
+            {                
                 QByteArray ptype = socket->read(sizeof (int));
                 QByteArray psize = socket->read(sizeof (int));
 

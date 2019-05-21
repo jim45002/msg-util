@@ -35,6 +35,7 @@ public:
     void process_data_packet(const voice_data_packet &data);
     void process_data_packet(const markup_data_packet &data);
 
+    bool send_packet_data(QByteArray &bytes);
 public slots:
     virtual void ready_write();
 private:
