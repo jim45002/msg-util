@@ -52,9 +52,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_voice:
@@ -62,9 +62,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();       
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_text:
@@ -72,9 +72,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();                
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     case packet_type::t_markup:
@@ -82,9 +82,9 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet_type data_packet_type = t;
         int packet_size = b.size();
         packet.append(reinterpret_cast<char*>(&data_packet_type),
-                      sizeof(packet_type));
+                      sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
-        packet.append(b.toStdString().c_str(),packet_size);
+        packet.append(b.data(),packet_size);
     }
         break;
     }
@@ -146,7 +146,7 @@ void writer_work_thread::ready_write()
                            break;
                        }
                     }
-                    f.remove();
+                   // f.remove();
                 }
             }
             else

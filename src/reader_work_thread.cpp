@@ -59,22 +59,29 @@ void reader_work_thread::ready_read()
                 QByteArray psize = socket->read(sizeof (int));
 
                 int type = *reinterpret_cast<const int*>
-                        (ptype.toStdString().c_str());
+                        (ptype.data());
 
                 const int size = *reinterpret_cast<const int*>
-                        (psize.toStdString().c_str());
+                        (psize.data());
 
                 QByteArray pdata;
                 pdata.resize(size);
                 long long num_read = 0;
                 for(int tries=0;(num_read!=size)&&(num_read<size);++tries)
                 {
-                   if(socket->bytesAvailable()>=(size-num_read))
+                   if(socket->bytesAvailable())
                    {
-                      long long num = socket->read(pdata.data()+num_read,(size-num_read));
+                      long long num =
+                            socket->read(pdata.data()+num_read,(size-num_read));
                       if(num > -1)
                       {
                          num_read += num;
+                         if(num_read>size)
+                         {
+                             qDebug() << "error on read - num_read > size "
+                                      << num_read;
+                             break;
+                         }
                       }
                       else
                       {

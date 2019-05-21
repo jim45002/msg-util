@@ -392,7 +392,7 @@ void messenger_dialog::save_image_data(QString selected_image_file)
         }
 
         QByteArray packet;
-        packet.append(reinterpret_cast<char*>(&idt),sizeof(image_data_type));
+        packet.append(reinterpret_cast<char*>(&idt),sizeof(char));
         int size = data_buffer.size();
         packet.append(reinterpret_cast<char*>(&size),sizeof(int));
         packet.append(data_buffer);
@@ -739,13 +739,13 @@ void messenger_dialog::timer_timedout()
                         QDataStream data_stream(complete_image_data_buffer);
 
                         QByteArray byte_data;
-                        byte_data.resize(sizeof(image_data_type));
+                        byte_data.resize(sizeof(char));
                         data_stream.readRawData(byte_data.data(),
-                                                sizeof(image_data_type));
+                                                sizeof(char));
                         image_data_type image_type =
                                 (image_data_type) *byte_data.data();
 
-                        qDebug() << "image type is " << (int)image_type;
+                        qDebug() << "image type is " << (char)image_type;
 
                         byte_data.resize(sizeof(int));
                         data_stream.readRawData(byte_data.data(),sizeof(int));
@@ -760,7 +760,7 @@ void messenger_dialog::timer_timedout()
                             {
                                 QString file(filename);
                                 filename += ".png";
-                                QFile::copy(file,filename);
+
                             }
                                 break;
 
@@ -768,14 +768,14 @@ void messenger_dialog::timer_timedout()
                             {
                                 QString file(filename);
                                 filename += ".jpg";
-                                QFile::copy(file,filename);
+
                             }
                                 break;
                             case t_gif:
                             {
                                 QString file(filename);
                                 filename += ".gif";
-                                QFile::copy(file,filename);
+
                             }
                                 break;
 
