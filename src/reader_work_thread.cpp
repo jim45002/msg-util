@@ -75,6 +75,7 @@ void reader_work_thread::ready_read()
                       if(num > -1)
                       {
                          num_read += num;
+                         qDebug() << "num read == " << num_read;
                       }
                       else
                       {
