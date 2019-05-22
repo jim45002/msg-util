@@ -17,6 +17,10 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 <td> </td>
 <td> </td>
 <td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td> </td>
 </tr>
 </table>
 
