@@ -3,7 +3,7 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 
 <table>
 <tr> 
-<td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="559"> </td>
+<td> <img src="./resources/msg_util_gui.png" alt="" width="500" height="500"> </td>
 <td> <img src="./resources/msg_util_3.png" alt="" width="882" height="454"> </td>
 </tr>
 <tr> 
