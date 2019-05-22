@@ -5,13 +5,13 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 
 <table>
 <tr> 
-<td> <img src="./resources/msg_util_1.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_2.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_3.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_4.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_5.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_6.png" alt="" width="250" height="200"> </td>
-<td> <img src="./resources/msg_util_7.png" alt="" width="250" height="200"> </td>
+<td> <img src="./resources/msg_util_1.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_2.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_3.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_4.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_5.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_6.png" alt="" width="250" height="300"> </td>
+<td> <img src="./resources/msg_util_7.png" alt="" width="250" height="300"> </td>
 </tr>
 <tr> 
 <td> </td>
