@@ -38,7 +38,7 @@ This application was written for Debian Linux.
 </table>
 
 # Build Instructions
-This source code was built using the cmake build tool. How to build and usage instructions will be added to this repository soon. If you would like to build and run the application and have questions contact the Bitmessage address BM-2cWzE6TNpMDuaA9ZcLubBfxderyTsnKQ8n with any questions or email hotmethods@protonmail.com. This is a new repository and Msg_util isn't in a release state yet so, please be patient.
+Upon request a release tarball can be sent to you with usage instructions. This source code was built using the cmake build tool. How to build and usage instructions will be added to this repository soon. If you would like to build and run the application and have questions contact the Bitmessage address BM-2cWzE6TNpMDuaA9ZcLubBfxderyTsnKQ8n with any questions or email hotmethods@protonmail.com. This is a new repository and Msg_util isn't in a release state yet so, please be patient.
 
 
 
