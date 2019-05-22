@@ -731,7 +731,7 @@ void messenger_dialog::timer_timedout()
             }
             else
             {
-                //QFile::remove(filename);
+                QFile::remove(filename);
                 filename = filename.remove(".bz2");
                 QFile image_data_file(filename);
                 if(image_data_file.open(QIODevice::ReadOnly))
