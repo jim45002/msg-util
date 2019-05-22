@@ -6,7 +6,7 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 <td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
 </tr>
 <tr> 
-<td> <img src="./resources/msg_util_7.png" alt="" width="882" height="487">  </td>
+<td> <img src="./resources/msg_util_5.png" alt="" width="882" height="487">  </td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_3.png" alt="" width="882" height="487">  </td>
@@ -18,7 +18,7 @@ Voice, and text messaging utility for the Tor network. To learn about the Tor ne
 <td> <img src="./resources/msg_util_1.png" alt="" width="150" height="100"> </td>
 <td> <img src="./resources/msg_util_2.png" alt="" width="150" height="100"> </td>
 <td> <img src="./resources/msg_util_4.png" alt="" width="150" height="100"> </td>
-<td> <img src="./resources/msg_util_5.png" alt="" width="150" height="100"> </td>
+<td> <img src="./resources/msg_util_7.png" alt="" width="150" height="100"> </td>
 <td> <img src="./resources/msg_util_6.png" alt="" width="150" height="100"> </td>
 </tr>
 <tr> 
