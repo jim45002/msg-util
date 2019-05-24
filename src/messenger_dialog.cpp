@@ -62,6 +62,8 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./outgoing_map_markup_data"));
     dir.mkdir(QString("./incoming_image_data"));
     dir.mkdir(QString("./outgoing_image_data"));
+    dir.mkdir(QString("./incoming_video_data"));
+    dir.mkdir(QString("./outgoing_video_data"));
 
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),

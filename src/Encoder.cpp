@@ -46,7 +46,7 @@ Encoder::Encoder(QDataStream& inputFrames, QObject *parent) :
         if(inputFrames.atEnd())
                            break;
 
-        /*Copy the 16 bits values to int so Speex can work on them*/
+        /*Copy the 16 bits values to float so Speex can work on them*/
 
         for (int i=0;i<frameSize;i++)
             input[i] = in[i];
@@ -60,8 +60,7 @@ Encoder::Encoder(QDataStream& inputFrames, QObject *parent) :
         /*Copy the bits to an array of char that can be written*/
         nbBytes = speex_bits_write(&bits,cbits.data(),cbits.size());
 
-        /*Write the size of the frame first. This is what sampledec expects but
-        it’s likely to be different in your own application*/
+        /*Write the size of the frame first. This is what sampledec expects */
         outputBuffer.append(reinterpret_cast<char*>(&nbBytes),sizeof(int));
 
         /*Write the compressed data*/

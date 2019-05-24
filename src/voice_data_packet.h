@@ -8,10 +8,11 @@ class QByteArray;
 class voice_data_packet
 {
 public:
-    voice_data_packet(QByteArray&);
+    voice_data_packet(QByteArray&, int id);
 
 private:
     QString filename;
+    QString identifier;
 };
 
 #endif // VOICE_DATA_PACKET_H

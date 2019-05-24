@@ -69,7 +69,12 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/data_receiver_factory.cpp"
                       "./src/image_data_packet.h"
                       "./src/image_data_packet.cpp"
-                      "./src/image_data_types.h")
+                      "./src/image_data_types.h"
+                      "./src/incoming_av_data_sync.h"
+                      "./src/incoming_av_data_sync.cpp"
+                      "./src/incoming_av_data_sync_interface.h"
+                      "./src/video_data_packet.h"
+                      "./src/video_data_packet.cpp")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
