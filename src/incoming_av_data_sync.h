@@ -3,11 +3,11 @@
 
 #include "incoming_av_data_sync_interface.h"
 
-class incoming_av_data_sync : public incoming_data_sync_interface
+class incoming_av_data_sync
+        : public incoming_av_data_sync_interface
 {
-    Q_OBJECT
 public:
-    incoming_av_data_sync(QObject *parent);
+    incoming_av_data_sync(QObject *parent = nullptr);
     virtual ~incoming_av_data_sync();
     virtual void set_identifier(int);
     virtual void set_audio_filename(QString);

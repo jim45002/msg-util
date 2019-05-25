@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    qRegisterMetaType<incoming_av_data_sync>("incoming_av_data_sync");
+  qRegisterMetaType<incoming_av_data_sync>("incoming_av_data_sync");
 
     QApplication a(argc, argv);
 

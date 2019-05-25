@@ -8,7 +8,7 @@ class QByteArray;
 class voice_data_packet
 {
 public:
-    voice_data_packet(QByteArray&, int id);
+    voice_data_packet(QByteArray&, int id=0);
 
 private:
     QString filename;

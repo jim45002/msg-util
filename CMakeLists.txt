@@ -14,6 +14,7 @@ include_directories(
        ${QT_INCLUDES}
         ../../libs/qwt/qwt-6.1.3/src
         ./libs/map_widget_factory
+        ./libs/cameraWidget
                    )
 
 link_directories( ../../libs/qwt/build/lib
@@ -78,4 +79,5 @@ set(msg_util_SOURCES "./src/main.cpp"
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
-                                map_scribble_widget_factory qwt speex speexdsp)
+                                map_scribble_widget_factory qwt speex speexdsp
+                                cameraWidget)

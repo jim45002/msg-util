@@ -1,7 +1,7 @@
 #include "incoming_av_data_sync.h"
 
 incoming_av_data_sync::incoming_av_data_sync(QObject* parent)
-    : incoming_data_sync_interface (parent)
+    : incoming_av_data_sync_interface (parent)
 {
 
 }
