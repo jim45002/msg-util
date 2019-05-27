@@ -14,7 +14,7 @@ include_directories(
        ${QT_INCLUDES}
         ../../libs/qwt/qwt-6.1.3/src
         ./libs/map_widget_factory
-        ./libs/cameraWidget
+        ./libs/camera_widget_factory/
                    )
 
 link_directories( ../../libs/qwt/build/lib
@@ -26,6 +26,7 @@ set(SOURCE_DIR ./src)
 find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
+
 
 #QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 

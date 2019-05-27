@@ -13,7 +13,10 @@ class QwtPlot;
 class QFile;
 class QListWidget;
 class QTimer;
+class QGraphicsScene;
 
+class camera_device_interface;
+class camera_widget_interface;
 class map_widget_interface;
 class tor_config_options_interface;
 class audio_buffer_device;
@@ -22,7 +25,8 @@ class data_receiver_interface;
 class audio_file_player_thread;
 class data_transmitter_factory_interface;
 class data_transmitter_interface;
-class QGraphicsScene;
+
+
 
 namespace Ui {
 class messenger_dialog;
@@ -59,9 +63,15 @@ public slots:
     void next_image_pushButton_clicked(bool);
     void image_remove_button_clicked(bool);
     void image_clear_button_clicked(bool);
+    void video_transmit_button_released();
+    void video_transmit_button_pressed();
+    void video_off_button_clicked(bool);
+    void video_on_button_clicked(bool);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;
+    std::shared_ptr<camera_device_interface> cdi;
+    std::shared_ptr<camera_widget_interface> cwi;
     std::shared_ptr<data_transmitter_factory_interface> data_trans_f_inter;
     data_receiver_interface*  data_recv_inter;
     QList<data_transmitter_interface*> data_trans_list;

@@ -14,7 +14,9 @@
 #include <QPoint>
 #include <QProcess>
 #include <QDataStream>
+#include <QUrl>
 #include <QDebug>
+#include <QDir>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -22,6 +24,9 @@
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
 
+#include "camera_device_interface.h"
+#include "camera_widget_interface.h"
+#include "camera_widget_factory.h"
 #include "image_data_types.h"
 #include "image_data_packet.h"
 #include "data_transmitter_factory_interface.h"
@@ -34,7 +39,6 @@
 #include "map_widget_factory.h"
 #include "ui_messenger_dialog.h"
 #include "messenger_dialog.h"
-
 
 messenger_dialog::messenger_dialog(
         std::shared_ptr<data_transmitter_factory_interface> dtfi,
@@ -64,6 +68,8 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./outgoing_image_data"));
     dir.mkdir(QString("./incoming_video_data"));
     dir.mkdir(QString("./outgoing_video_data"));
+    dir.mkdir(QString("./outgoing_av_data"));
+    dir.mkdir(QString("./incoming_av_data"));
 
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),
@@ -84,6 +90,18 @@ messenger_dialog::messenger_dialog(
             SIGNAL(released()),
             this,
             SLOT(text_transmit_button_released()));
+
+
+    connect(ui->video_transmit_pushButton,
+            SIGNAL(pressed()),
+            this,
+            SLOT(video_transmit_button_pressed()));
+
+    connect(ui->video_transmit_pushButton,
+            SIGNAL(released()),
+            this,
+            SLOT(video_transmit_button_released()));
+
 
     connect(ui->enable_scribble_checkBox,
             SIGNAL(clicked(bool)),
@@ -114,6 +132,20 @@ messenger_dialog::messenger_dialog(
             SIGNAL(clicked(bool)),
             this,
             SLOT(image_clear_button_clicked(bool)));
+
+    connect(ui->video_on_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(video_on_button_clicked(bool)));
+
+    connect(ui->video_off_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(video_off_button_clicked(bool)));
+
+    cdi = camera_widget_factory::
+            create(cdi.get(),
+                   ui->outgoing_video_graphicsView);
 
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
@@ -177,6 +209,17 @@ messenger_dialog::messenger_dialog(
 messenger_dialog::~messenger_dialog()
 {
     delete ui;
+}
+
+
+void messenger_dialog::video_on_button_clicked(bool)
+{
+    cdi->start();
+}
+
+void messenger_dialog::video_off_button_clicked(bool)
+{
+    cdi->stop();
 }
 
 void messenger_dialog::image_transmit_button_clicked(bool)
@@ -466,7 +509,8 @@ void messenger_dialog::insert_connections_button(bool)
         ui->connections_listwidget->clear();
         while(!connections_file.atEnd())
         {
-            QByteArray line = connections_file.readLine(256).trimmed();
+            QByteArray line =
+                    connections_file.readLine(256).trimmed();
             if(line.length())
                ui->connections_listwidget->addItem(QString(line));
         }
@@ -962,7 +1006,6 @@ void messenger_dialog::timer_timedout()
 
     auto destroy_transmitters = [this] ()
     {
-       qDebug() << "checking for finished transmitter";
        int num_active=0;
        for(auto iter : data_trans_list)
        {
@@ -997,6 +1040,27 @@ void messenger_dialog::voice_transmit_button_pressed()
    audio_buffer->start_audio_read();
 }
 
+void messenger_dialog::video_transmit_button_pressed()
+{
+   qDebug() << "video_transmit pressed";
+   cdi->start_record(
+               QUrl::fromLocalFile(QString("/tmp/outgoing_vid.ogg")
+                                   ));
+}
+
+void messenger_dialog::video_transmit_button_released()
+{
+   qDebug() << "video_transmit released";
+   cdi->stop_record();
+   QString filename (
+               "./outgoing_av_data/" +
+               QDateTime::currentDateTime().toString().remove(' ') +
+               ".ogg"
+               );
+   QFile::copy(QString("/tmp/outgoing_vid.ogg"),filename);
+   QFile::remove(QString("/tmp/outgoing_vid.ogg"));
+}
+
 void messenger_dialog::voice_transmit_button_released()
 {
    qDebug() << "voice_transmit released";
@@ -1014,9 +1078,9 @@ void messenger_dialog::voice_transmit_button_released()
    {     
      qDebug() << "unable to determine receiver address";
       ui->statusbar_label->setText
-              ("unable to determine receiver address - select a connection");
+              ("unable to determine receiver address - "
+               "select a connection");
    }
-
 }
 
 void messenger_dialog::clear_outgoing_plot()

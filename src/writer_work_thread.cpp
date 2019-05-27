@@ -47,6 +47,16 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
     QByteArray packet;
     switch(t)
     {
+    case packet_type::t_video:
+    {
+        packet_type data_packet_type = t;
+        int packet_size = b.size();
+        packet.append(reinterpret_cast<char*>(&data_packet_type),
+                      sizeof(int));
+        packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        packet.append(b.data(),packet_size);
+    }
+        break;
     case packet_type::t_image:
     {
         packet_type data_packet_type = t;
