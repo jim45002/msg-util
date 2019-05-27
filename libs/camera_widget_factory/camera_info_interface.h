@@ -33,7 +33,6 @@ struct camera_info_interface
     camera_info_interface() { }
     virtual ~camera_info_interface() { };
 
-
     virtual QString description() const = 0;
     virtual QString deviceName() const = 0;
     virtual bool isNull() const = 0;
