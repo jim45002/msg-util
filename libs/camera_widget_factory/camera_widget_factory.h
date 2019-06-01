@@ -10,6 +10,9 @@ class camera_device_interface;
 class camera_widget_factory
 {
 public:
+
+    enum stream_origin : int { local=0, remote=1 };
+
     camera_widget_factory();
     ~camera_widget_factory() = default;
 
@@ -22,6 +25,7 @@ public:
 
     static std::shared_ptr<camera_widget_interface>
     create(camera_widget_interface*,
+           stream_origin origin,
            QWidget *parent);
 };
 

@@ -24,13 +24,15 @@ using namespace std;
 
 class camera_widget
         : public QObject, public camera_widget_interface,
-          private Ui::camera_widget
+        private Ui::camera_widget
 {
     Q_OBJECT
 
 public:
     camera_widget(QWidget *parent);
+    camera_widget(camera_widget_interface *, QWidget *parent);
     virtual ~camera_widget();
+
     virtual QWidget* parent_widget();
     virtual void pause() {}
     virtual void start();
@@ -43,15 +45,17 @@ public:
     virtual void setMuted(bool ) {}
     virtual void setVolume(int ){}
     virtual void stop() {}
+
+
 private:
-  QWidget* parent;
-  shared_ptr<QMediaPlayer> player;
-  video_widget *videoWidget;
-  shared_ptr<QMediaContent> media;
-  QIODevice *stream;
-  QMediaObject*  media_object;
-  QMediaRecorder* media_recorder;
-  video_buffer_device* video_buff_device;
+    QWidget* parent;
+    shared_ptr<QMediaPlayer> player;
+    video_widget *videoWidget;
+    shared_ptr<QMediaContent> media;
+    QIODevice *stream;
+    QMediaObject*  media_object;
+    QMediaRecorder* media_recorder;
+    video_buffer_device* video_buff_device;
 };
 
 #endif // CAMERA_WIDGET_H

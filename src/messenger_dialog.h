@@ -72,6 +72,7 @@ private:
     Ui::messenger_dialog *ui;
     std::shared_ptr<camera_device_interface> cdi;
     std::shared_ptr<camera_widget_interface> cwi;
+    std::shared_ptr<camera_widget_interface> csi;
     std::shared_ptr<data_transmitter_factory_interface> data_trans_f_inter;
     data_receiver_interface*  data_recv_inter;
     QList<data_transmitter_interface*> data_trans_list;

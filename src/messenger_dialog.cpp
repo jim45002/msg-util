@@ -147,6 +147,15 @@ messenger_dialog::messenger_dialog(
             create(cdi.get(),
                    ui->outgoing_video_graphicsView);
 
+    csi = camera_widget_factory::
+            create(csi.get(),
+                   camera_widget_factory::remote,
+                   ui->stream1_graphicsView);
+
+    QUrl url(QString("http://localhost:8000/theora.ogg"));
+    csi->setMedia(url);
+    csi->start();
+
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
                                     QSizePolicy::Preferred);

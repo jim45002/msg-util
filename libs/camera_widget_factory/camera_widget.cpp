@@ -28,6 +28,18 @@ camera_widget::camera_widget(QWidget* parent)
   setupUi (parent);
 }
 
+camera_widget::camera_widget(camera_widget_interface*,
+                             QWidget* parent)
+    : parent(parent)
+{
+    setupUi (parent);
+    player = std::make_shared<QMediaPlayer>(this,
+                                            QMediaPlayer::
+                                            StreamPlayback);
+    player->setVideoOutput(viewfinder);
+}
+
+
 camera_widget::~camera_widget() {  }
 
 QWidget *camera_widget::parent_widget()
