@@ -16,6 +16,12 @@ class QString;
 class QCameraViewfinder;
 class QMediaObject;
 class QMediaRecorder;
+class QVideoProbe;
+class QVideoFrame;;
+class object_detect_filter;
+class detect_filter_runnable;
+class QVideoSurfaceFormat;
+
 
 class video_buffer_device;
 class video_widget;
@@ -46,6 +52,8 @@ public:
     virtual void setVolume(int ){}
     virtual void stop() {}
 
+public slots:
+    void video_frame_probed(const QVideoFrame &);
 
 private:
     QWidget* parent;
@@ -56,6 +64,11 @@ private:
     QMediaObject*  media_object;
     QMediaRecorder* media_recorder;
     video_buffer_device* video_buff_device;
+
+    QVideoProbe* video_probe;
+    object_detect_filter* detector;
+    detect_filter_runnable* filter;
+    QVideoSurfaceFormat* video_surface_format;
 };
 
 #endif // CAMERA_WIDGET_H

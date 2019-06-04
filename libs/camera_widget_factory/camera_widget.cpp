@@ -14,7 +14,12 @@
 #include <QAbstractVideoSurface>
 #include <QVideoSurfaceFormat>
 #include <QCameraViewfinder>
+#include <QVideoProbe>
+#include <QVideoFrame>
+#include <QVideoSurfaceFormat>
 
+#include "detect_filter.h"
+#include "video_frame_handler.h"
 #include "video_widget.h"
 #include "video_buffer_device.h"
 #include "camera_device.h"
@@ -33,19 +38,52 @@ camera_widget::camera_widget(camera_widget_interface*,
     : parent(parent)
 {
     setupUi (parent);
+
     player = std::make_shared<QMediaPlayer>(this,
                                             QMediaPlayer::
                                             StreamPlayback);
     player->setVideoOutput(viewfinder);
+
+    detector = new object_detect_filter;
+    filter = new detect_filter_runnable(detector);
+
+    video_probe = new QVideoProbe;
+    video_probe->setSource(player.get());
+
+    connect(video_probe,
+            SIGNAL(videoFrameProbed(const QVideoFrame&)),
+            this,
+            SLOT(video_frame_probed(const QVideoFrame&)));
+
 }
 
 
-camera_widget::~camera_widget() {  }
+camera_widget::~camera_widget()
+{
+
+}
+
 
 QWidget *camera_widget::parent_widget()
 {
     return parent;
 }
+
+
+void camera_widget::video_frame_probed(const QVideoFrame &frame)
+{
+    const QVideoSurfaceFormat surface_format(frame.size(),
+                                       frame.pixelFormat(),
+                                       frame.handleType());
+    QVideoFrame input = frame;
+    filter->run(&input,
+                surface_format,
+                QVideoFilterRunnable::LastInChain);
+
+}
+
+
+
 
 void camera_widget::start()
 {
@@ -78,3 +116,5 @@ QCameraViewfinder* camera_widget::video_surface_widget()
 {
     return viewfinder;
 }
+
+

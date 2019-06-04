@@ -14,7 +14,7 @@ set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
 
 include_directories( ${QT_INCLUDES} )
 
-#link_directories()
+link_directories( /usr/local/lib )
 
 set(SOURCE_DIR ./)
 
@@ -41,10 +41,15 @@ set(cameraWidget_SOURCES "./camera_widget.h"
                          "./camera_device_interface.h"
                          "./camera_info_interface.h"
                          "./camera_info.h"
-                         "./camera_info.cpp")
+                         "./camera_info.cpp"
+                         "./video_frame_handler.h"
+                         "./video_frame_handler.cpp"
+                         "./video_frame_handler_interface.h"
+                         "./detect_filter.h"
+                         "./detect_filter.cpp")
 
 add_library(cameraWidget SHARED ${cameraWidget_SOURCES})
-target_link_libraries(cameraWidget Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets)
+target_link_libraries(cameraWidget Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets opencv_core opencv_objdetect opencv_imgproc opencv_ml opencv_highgui)
 
 include(GNUInstallDirs)
 

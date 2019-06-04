@@ -152,9 +152,8 @@ messenger_dialog::messenger_dialog(
                    camera_widget_factory::remote,
                    ui->stream1_graphicsView);
 
-    QUrl url(QString("http://localhost:8000/theora.ogg"));
-    csi->setMedia(url);
-    csi->start();
+  //  csi->setMedia(url);
+  //  csi->start();
 
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
@@ -176,6 +175,12 @@ messenger_dialog::messenger_dialog(
     auto l = new QHBoxLayout;
     ui->map_widget->setLayout(l);
     l->addWidget(mwfi->map_dispaly_widget());
+
+    streams_mwfi = map_widget_factory::create(this);
+    streams_mwfi->map_enable_scibble(false);
+    auto l2 = new QHBoxLayout;
+    ui->streams_map_widget->setLayout(l2);
+    l2->addWidget(streams_mwfi->map_dispaly_widget());
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,

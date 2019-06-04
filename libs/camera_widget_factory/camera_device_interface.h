@@ -6,6 +6,7 @@
 
 class QUrl;
 class QCamera;
+class QVideoFrame;
 
 class camera_info_interface;
 
@@ -24,6 +25,9 @@ public:
     virtual void stop_record() = 0;
     virtual QCamera* get_camera_device() = 0;
     virtual QList<camera_info_interface*> get_available_cameras() = 0;
+
+public slots:
+    virtual void video_frame_probed(const QVideoFrame &) = 0;
 
 };
 

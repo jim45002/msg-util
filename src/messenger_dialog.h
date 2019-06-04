@@ -78,6 +78,7 @@ private:
     QList<data_transmitter_interface*> data_trans_list;
     QList<QGraphicsScene*> graphics_scene_list;
     std::shared_ptr<map_widget_interface> mwfi;
+    std::shared_ptr<map_widget_interface> streams_mwfi;
     std::shared_ptr<audio_buffer_device> audio_buffer;
     std::shared_ptr<audio_buffer_device> incoming_audio_buffer;
     std::shared_ptr<audio_file_player_thread> aud_file_player_thread;
