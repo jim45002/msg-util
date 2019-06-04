@@ -10,10 +10,10 @@ This application was written for Debian Linux.
 
 <table>
 <tr> 
-<td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
+<td> <img src="./resources/msg-util-stream-ui.png" alt="" width="800" height="452"> </td>
 </tr>
 <tr> 
-<td> <img src="./resources/msg-util-stream-ui.png" alt="" width="800" height="452"> </td>
+<td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_4.png" alt="" width="882" height="487">  </td>
