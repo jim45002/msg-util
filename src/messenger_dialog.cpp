@@ -152,8 +152,6 @@ messenger_dialog::messenger_dialog(
                    camera_widget_factory::remote,
                    ui->stream1_graphicsView);
 
-  //  csi->setMedia(url);
-  //  csi->start();
 
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
