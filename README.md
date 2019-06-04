@@ -13,22 +13,22 @@ This application was written for Debian Linux.
 <td> <img src="./resources/msg-util-stream-ui.png" alt="" width="800" height="452"> </td>
 </tr>
 <tr> 
-<td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
-</tr>
-<tr> 
-<td> <img src="./resources/msg_util_4.png" alt="" width="882" height="487">  </td>
-</tr>
-<tr> 
-<td> <img src="./resources/msg_util_3.png" alt="" width="882" height="487">  </td>
-</tr>
-<tr> 
 <td> <b>Object detection in camera video stream</b> </td>
+</tr>
+<tr> 
+<td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
 </tr>
 <tr> 
 <td><b>Incoming map-markup, voice and text message arriving through Tor network</b></td>
 </tr>
 <tr> 
+<td> <img src="./resources/msg_util_4.png" alt="" width="882" height="487">  </td>
+</tr>
+<tr> 
 <td> <b>Main window tab showing another map-markup</b> </td>
+</tr>
+<tr> 
+<td> <img src="./resources/msg_util_3.png" alt="" width="882" height="487">  </td>
 </tr>
 <tr> 
 <td> <b> Main window showing public-key and connections listbox </b></td>
