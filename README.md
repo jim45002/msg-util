@@ -10,28 +10,31 @@ This application was written for Debian Linux.
 
 <table>
 <tr> 
+<td> <img src="./resources/msg-util-stream-ui.png" alt="" width="800" height="452"> </td>
+</tr>
+<tr> 
+<td> <b>Object detection in camera video stream and map used for location tracking</b> </td>
+</tr>
+<tr> 
 <td> <img src="./resources/msg_util_gui.png" alt="" width="882" height="500"> </td>
 </tr>
 <tr> 
-<td> <img src="./resources/msg-util-stream-ui.png" alt="" width="800" height="452"> </td>
+<td><b>Incoming map-markup, voice and text message arriving through Tor network</b></td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_4.png" alt="" width="882" height="487">  </td>
 </tr>
 <tr> 
+<td> <b>Main window tab showing another map-markup</b> </td>
+</tr>
+<tr> 
 <td> <img src="./resources/msg_util_3.png" alt="" width="882" height="487">  </td>
+</tr>
+<tr> 
+<td> <b> Main window showing public-key and connections listbox </b></td>
 </tr>
 </table>
 
-<table>
-<tr> 
-<td> <img src="./resources/msg_util_1.png" alt="" width="150" height="100"> </td>
-<td> <img src="./resources/msg_util_2.png" alt="" width="150" height="100"> </td>
-<td> <img src="./resources/msg_util_5.png" alt="" width="150" height="100"> </td>
-<td> <img src="./resources/msg_util_7.png" alt="" width="150" height="100"> </td>
-<td> <img src="./resources/msg_util_6.png" alt="" width="150" height="100"> </td>
-</tr>
-</table>
 
 # Build Instructions
 Upon request a release tarball can be sent to you with usage instructions. This source code was built using the cmake build tool. How to build and usage instructions will be added to this repository soon. If you would like to build and run the application and have questions contact the Bitmessage address BM-2cWzE6TNpMDuaA9ZcLubBfxderyTsnKQ8n with any questions or email hotmethods@protonmail.com. This is a new repository and Msg_util isn't in a release state yet so, please be patient.
