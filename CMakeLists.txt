@@ -14,6 +14,7 @@ include_directories(
        ${QT_INCLUDES}
         ../../libs/qwt/qwt-6.1.3/src
         ./libs/map_widget_factory
+        ./libs/camera_widget_factory/
                    )
 
 link_directories( ../../libs/qwt/build/lib
@@ -25,6 +26,7 @@ set(SOURCE_DIR ./src)
 find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
+
 
 #QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 
@@ -69,8 +71,14 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/data_receiver_factory.cpp"
                       "./src/image_data_packet.h"
                       "./src/image_data_packet.cpp"
-                      "./src/image_data_types.h")
+                      "./src/image_data_types.h"
+                      "./src/incoming_av_data_sync.h"
+                      "./src/incoming_av_data_sync.cpp"
+                      "./src/incoming_av_data_sync_interface.h"
+                      "./src/video_data_packet.h"
+                      "./src/video_data_packet.cpp")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
-                                map_scribble_widget_factory qwt speex speexdsp)
+                                map_scribble_widget_factory qwt speex speexdsp
+                                cameraWidget)

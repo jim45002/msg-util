@@ -9,8 +9,9 @@
 #include "voice_data_packet.h"
 
 
-voice_data_packet::voice_data_packet(QByteArray& bytes)
+voice_data_packet::voice_data_packet(QByteArray& bytes,int id)
 {
+    identifier = QString::number(id);
     QDataStream stream(bytes);
     Decoder decoder(stream);
     bytes = decoder.OutputBuffer();
@@ -18,6 +19,7 @@ voice_data_packet::voice_data_packet(QByteArray& bytes)
     filename = QString("./incoming_voice_data/voice_data_") +
                QDateTime::currentDateTime().
                toString() +
+               (".")+identifier +
                QString(".voc");
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly))

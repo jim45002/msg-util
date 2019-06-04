@@ -19,7 +19,7 @@ map_widget::map_widget(QWidget* parent)
     layout->addWidget (paint_layer);
     paint_layer->show ();
     setProjection(Marble::Mercator);
-    setMapThemeId(":map/theme/openstreetmap.dgml");
+    setMapThemeId("earth/openstreetmap/openstreetmap.dgml");
 
     QObject::connect(this,SIGNAL(zoomChanged(int)),this,SLOT(on_zoomChanged(int)));
     QObject::connect(this,SIGNAL(distanceChanged(QString)),this, SLOT(on_distanceChanged(QString)));

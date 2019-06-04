@@ -35,8 +35,10 @@ set(map_scribble_widget_factory_SOURCES
     "scribble_manager.h"
     ${RES_SOURCES})
 
-add_library(map_scribble_widget_factory SHARED ${map_scribble_widget_factory_SOURCES})
-target_link_libraries(map_scribble_widget_factory Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network marblewidget-qt5)
+add_library(map_scribble_widget_factory SHARED
+    ${map_scribble_widget_factory_SOURCES})
+target_link_libraries(map_scribble_widget_factory
+    Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network marblewidget-qt5)
 
 include(GNUInstallDirs)
 
