@@ -3,7 +3,9 @@ Free opensource voice, and text messaging utility for the Tor anonymity network.
 
 Msg_util uses push-to-talk functionality for voice messages. All data is transmitted over the Tor network via the msg_util hidden service. Using the Torrc_Util application (i.e., https://github.com/jim45002/torrc_util) users select message communications routes. For each transmitted voice, text, image, video, and map-markup, the Tor service will do layered encryption, and route the data through user selected network nodes. Before transmittng the message, additonal encryption can be performed on the data using user provided public-keys in the GUI's public-key selection list. 
 
-Msg_util is another free optional tool for anonymous private communications during mission planning, or business excursions in remote parts of the world.    
+Msg_util is another free optional tool for anonymous private communications during mission planning, or business excursions in remote parts of the world. This application can also be used for community driven public-safety operations, to provide communities with the ability to interconnect and interchange their data, and real-time communications with public-safety professionals.
+
+Through the use of a decentralized file-system, msg_util functions as a distributed desktop, with the ablility to share user's application data acorss a global network.    
 
 This application was written for Debian Linux. 
 
@@ -16,16 +18,16 @@ This application was written for Debian Linux.
 <td> <b>Above: Object detection in camera video stream and map used for location tracking</b> </td>
 </tr>
 <tr> 
+<td> <img src="./resources/msg-util-view.png" alt=""  width="800" height="452">  </td>
+</tr>
+<tr> 
+<td> <b>Above: Main window tab showing communication controls, gui view list, and marked-up map</b> </td>
+</tr>
+<tr> 
 <td> <img src="./resources/msg_util_gui.png" alt=""  width="800" height="452"> </td>
 </tr>
 <tr> 
 <td><b>Above: Incoming map-markup, voice and text message arriving through Tor network</b></td>
-</tr>
-<tr> 
-<td> <img src="./resources/msg_util_4.png" alt=""  width="800" height="452">  </td>
-</tr>
-<tr> 
-<td> <b>Above: Main window tab showing another map-markup</b> </td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_3.png" alt=""  width="800" height="452">  </td>

@@ -50,7 +50,7 @@ public:
     virtual QCameraViewfinder* video_surface_widget();
     virtual void setMuted(bool ) {}
     virtual void setVolume(int ){}
-    virtual void stop() {}
+    virtual void stop();
 
 public slots:
     void video_frame_probed(const QVideoFrame &);

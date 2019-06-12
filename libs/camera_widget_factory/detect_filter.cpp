@@ -48,6 +48,7 @@ QVideoFrame detect_filter_runnable::run(QVideoFrame *input, const QVideoSurfaceF
                          image.bytesPerLine());
 
         cv::flip(mat, mat, 0);
+
         if(classifier.empty())
         {
             QFile xml("./cars.xml");
@@ -95,21 +96,6 @@ QVideoFrame detect_filter_runnable::run(QVideoFrame *input, const QVideoSurfaceF
                         float(detected[0].y) / float(mat.rows),
                         float(detected[0].width) / float(mat.cols),
                         float(detected[0].height) / float(mat.rows));
-
-                QPainter p(&image);
-                QRect r(detected[0].x,
-                        detected[0].y,
-                        detected[0].width,
-                        detected[0].height);
-                p.drawRects(&r,1);
-
-                cv::Mat mat2(image.height(),
-                                 image.width(),
-                                 CV_8UC3,
-                                 image.bits(),
-                                 image.bytesPerLine());
-
-                cv::flip(mat2, mat2, 0);
             }
             else
             {
@@ -126,6 +112,7 @@ QVideoFrame detect_filter_runnable::run(QVideoFrame *input, const QVideoSurfaceF
     }
 
     input->unmap();
+
     return *input;
 }
 

@@ -17,6 +17,8 @@
 #include <QVideoProbe>
 #include <QVideoFrame>
 #include <QVideoSurfaceFormat>
+#include <QPaintEngine>
+#include <QColor>
 
 #include "detect_filter.h"
 #include "video_frame_handler.h"
@@ -76,18 +78,20 @@ void camera_widget::video_frame_probed(const QVideoFrame &frame)
                                        frame.pixelFormat(),
                                        frame.handleType());
     QVideoFrame input = frame;
-    filter->run(&input,
+    input = filter->run(&input,
                 surface_format,
                 QVideoFilterRunnable::LastInChain);
-
 }
-
-
 
 
 void camera_widget::start()
 {
     player->play();
+}
+
+void camera_widget::stop()
+{
+    player->stop();
 }
 
 void camera_widget::setMedia(QUrl &url, QIODevice *stream)
@@ -116,5 +120,6 @@ QCameraViewfinder* camera_widget::video_surface_widget()
 {
     return viewfinder;
 }
+
 
 
