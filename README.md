@@ -21,7 +21,7 @@ This application was written for Debian Linux.
 <td> <img src="./resources/msg-util-view.png" alt=""  width="800" height="452">  </td>
 </tr>
 <tr> 
-<td> <b>Above: Main window tab showing communication controls and marked-up map</b> </td>
+<td> <b>Above: Main window tab showing communication controls, gui view list, and marked-up map</b> </td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_gui.png" alt=""  width="800" height="452"> </td>
