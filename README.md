@@ -22,10 +22,10 @@ This application was written for Debian Linux.
 <td><b>Above: Incoming map-markup, voice and text message arriving through Tor network</b></td>
 </tr>
 <tr> 
-<td> <img src="./resources/msg_util_4.png" alt=""  width="800" height="452">  </td>
+<td> <img src="./resources/msg-util-view.png" alt=""  width="800" height="452">  </td>
 </tr>
 <tr> 
-<td> <b>Above: Main window tab showing another map-markup</b> </td>
+<td> <b>Above: Main window tab showing communication controls and marked-up map</b> </td>
 </tr>
 <tr> 
 <td> <img src="./resources/msg_util_3.png" alt=""  width="800" height="452">  </td>

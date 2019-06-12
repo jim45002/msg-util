@@ -67,6 +67,10 @@ public slots:
     void video_transmit_button_pressed();
     void video_off_button_clicked(bool);
     void video_on_button_clicked(bool);
+    void stream1_start_push_button_clicked(bool);
+    void stream1_stop_push_button_clicked(bool);
+    void freq_slider_moved(int val);
+    void radio_button_clicked(bool);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;

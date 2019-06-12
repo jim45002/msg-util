@@ -143,6 +143,46 @@ messenger_dialog::messenger_dialog(
             this,
             SLOT(video_off_button_clicked(bool)));
 
+    connect(ui->stream1_start__pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(stream1_start_push_button_clicked(bool)));
+
+    connect(ui->stream1_stop_pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(stream1_stop_push_button_clicked(bool)));
+
+    connect(ui->ghz_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(radio_button_clicked(bool)));
+
+    connect(ui->mhz_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(radio_button_clicked(bool)));
+
+    connect(ui->khz_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(radio_button_clicked(bool)));
+
+    connect(ui->hz_radioButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(radio_button_clicked(bool)));
+
+    connect(ui->freq_spinBox,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(freq_slider_moved(int)));
+
+    ui->freq_spinBox->setSingleStep(1000000);
+    ui->freq_spinBox->setMaximum(2000000000);
+    ui->freq_spinBox->setMinimum(300000000);
+    ui->freq_spinBox->setFocusPolicy(Qt::StrongFocus);
+
     cdi = camera_widget_factory::
             create(cdi.get(),
                    ui->outgoing_video_graphicsView);
@@ -182,15 +222,15 @@ messenger_dialog::messenger_dialog(
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,
-                                                  ui->outgoing_doubleSpinBox,
-                                                  ui->incoming_doubleSpinBox,
+                                                  ui->squelch_doubleSpinBox,
+                                                  ui->squelch_doubleSpinBox,
                                                   nullptr);
     audio_buffer->open(QIODevice::WriteOnly);
 
     incoming_audio_buffer =
     std::make_shared<audio_buffer_device>(incoming_plot,
-                                          ui->outgoing_doubleSpinBox,
-                                          ui->incoming_doubleSpinBox,                                                                                   
+                                          ui->squelch_doubleSpinBox,
+                                          ui->squelch_doubleSpinBox,
                                           nullptr);
     connect(aud_file_player_thread.get(),
             SIGNAL(new_buffer_data(char*,qint64)),
@@ -223,6 +263,55 @@ messenger_dialog::~messenger_dialog()
     delete ui;
 }
 
+void messenger_dialog::radio_button_clicked(bool)
+{
+    if(ui->hz_radioButton->isChecked())
+    {
+       ui->freq_spinBox->setSingleStep(1);
+    }
+    else
+    if(ui->khz_radioButton->isChecked())
+    {
+        ui->freq_spinBox->setSingleStep(1000);
+    }
+    else
+    if(ui->mhz_radioButton->isChecked())
+    {
+        ui->freq_spinBox->setSingleStep(1000000);
+    }
+    else
+    if(ui->ghz_radioButton->isChecked())
+    {
+        ui->freq_spinBox->setSingleStep(1000000000);
+    }
+}
+
+void messenger_dialog::freq_slider_moved(int)
+{
+  if(ui->freq_spinBox->value()<1000)
+      ui->freq_spinBox->setSuffix("Hz");
+  else
+  if(ui->freq_spinBox->value()>=1000 && ui->freq_spinBox->value()<=999999)
+      ui->freq_spinBox->setSuffix("khz");
+  else
+  if(ui->freq_spinBox->value()>999999 && ui->freq_spinBox->value()<1000000000)
+      ui->freq_spinBox->setSuffix("Mhz");
+  else
+  if(ui->freq_spinBox->value()>=1000000000)
+      ui->freq_spinBox->setSuffix("Ghz");
+}
+
+void messenger_dialog::stream1_start_push_button_clicked(bool)
+{
+    QUrl url(QString("http://localhost:8000/theora.ogg"));
+    csi->setMedia(url);
+    csi->start();
+}
+
+void messenger_dialog::stream1_stop_push_button_clicked(bool)
+{
+    csi->stop();
+}
 
 void messenger_dialog::video_on_button_clicked(bool)
 {
