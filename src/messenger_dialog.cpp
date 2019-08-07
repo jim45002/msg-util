@@ -71,6 +71,20 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./outgoing_av_data"));
     dir.mkdir(QString("./incoming_av_data"));
 
+    dir.mkdir(QString("./outgoing_verified_voice_data"));
+    dir.mkdir(QString("./outgoing_verified_text_data"));
+    dir.mkdir(QString("./outgoing_verified_map_markup_data"));
+    dir.mkdir(QString("./outgoing_verified_image_data"));
+    dir.mkdir(QString("./outgoing_verified_video_data"));
+    dir.mkdir(QString("./outgoing_verified_av_data"));
+
+    dir.mkdir(QString("./unverified_voice_data"));
+    dir.mkdir(QString("./unverified_text_data"));
+    dir.mkdir(QString("./unverified_map_markup_data"));
+    dir.mkdir(QString("./unverified_image_data"));
+    dir.mkdir(QString("./unverified_video_data"));
+    dir.mkdir(QString("./unverified_av_data"));
+
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),
             this,

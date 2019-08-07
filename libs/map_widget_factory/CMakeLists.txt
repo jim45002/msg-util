@@ -18,7 +18,9 @@ find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 
 
-include_directories(${QT_INCLUDES})
+include_directories(${QT_INCLUDES} /usr/local/include/marble /usr/local/include)
+
+link_directories( /usr/local/lib )
 
 QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 

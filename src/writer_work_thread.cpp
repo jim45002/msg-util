@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDir>
 #include <QDataStream>
+#include <QCryptographicHash>
 
 #include "packet_types.h"
 #include "text_data_packet.h"
@@ -41,8 +42,9 @@ void writer_work_thread::run()
     task_completed=true;
 }
 
-QByteArray writer_work_thread::make_data_packet(const QByteArray b,
-                                                packet_type t)
+QByteArray writer_work_thread::make_data_packet(const QByteArray& b,
+                                                packet_type t,
+                                                const QByteArray& identifier)
 {
     QByteArray packet;
     switch(t)
@@ -54,7 +56,10 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet.append(reinterpret_cast<char*>(&data_packet_type),
                       sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        int id_size = identifier.size();
+        packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
         packet.append(b.data(),packet_size);
+        packet.append(identifier.data(),identifier.size());
     }
         break;
     case packet_type::t_image:
@@ -64,7 +69,10 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet.append(reinterpret_cast<char*>(&data_packet_type),
                       sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        int id_size = identifier.size();
+        packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
         packet.append(b.data(),packet_size);
+        packet.append(identifier.data(),identifier.size());
     }
         break;
     case packet_type::t_voice:
@@ -74,7 +82,15 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet.append(reinterpret_cast<char*>(&data_packet_type),
                       sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        int id_size = identifier.size();
+        packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
         packet.append(b.data(),packet_size);
+        packet.append(identifier.data(),identifier.size());
+    }
+        break;
+    case packet_type::t_av_packet:
+    {
+        qDebug() << "packet_type::t_av_packet not implemented";
     }
         break;
     case packet_type::t_text:
@@ -84,7 +100,10 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet.append(reinterpret_cast<char*>(&data_packet_type),
                       sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        int id_size = identifier.size();
+        packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
         packet.append(b.data(),packet_size);
+        packet.append(identifier.data(),identifier.size());
     }
         break;
     case packet_type::t_markup:
@@ -94,7 +113,10 @@ QByteArray writer_work_thread::make_data_packet(const QByteArray b,
         packet.append(reinterpret_cast<char*>(&data_packet_type),
                       sizeof(int));
         packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+        int id_size = identifier.size();
+        packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
         packet.append(b.data(),packet_size);
+        packet.append(identifier.data(),identifier.size());
     }
         break;
     }
@@ -182,7 +204,12 @@ void writer_work_thread::ready_write()
             if(f.open(QIODevice::ReadOnly))
             {
                 QByteArray bytes = f.readAll();
-                bytes=make_data_packet(bytes,packet_type::t_image);
+                bytes=make_data_packet(bytes,
+                                       packet_type::t_image,
+                                       QCryptographicHash::hash(f.fileName().toStdString().c_str(),
+                                                                QCryptographicHash::Sha256)
+                                       );
+
                 if(send_packet_data(bytes))
                 {
                    f.remove();
@@ -212,7 +239,10 @@ void writer_work_thread::ready_write()
             if(f.open(QIODevice::ReadOnly))
             {
                 QByteArray bytes = f.readAll();
-                bytes=make_data_packet(bytes,packet_type::t_markup);
+                bytes=make_data_packet(bytes,
+                                       packet_type::t_markup,
+                                       QCryptographicHash::hash(f.fileName().toStdString().c_str(),
+                                                                QCryptographicHash::Sha256));
                 if(bytes.size())
                 {
                     if(send_packet_data(bytes))
@@ -248,7 +278,10 @@ void writer_work_thread::ready_write()
                 QDataStream stream(bytes);
                 Encoder encoder(stream);
                 bytes = encoder.OutputBuffer();
-                bytes=make_data_packet(bytes,packet_type::t_voice);
+                bytes=make_data_packet(bytes,
+                                       packet_type::t_voice,
+                                       QCryptographicHash::hash(f.fileName().toStdString().c_str(),
+                                                                QCryptographicHash::Sha256));
                 if(bytes.size())
                 {
                     if(send_packet_data(bytes))
@@ -281,7 +314,10 @@ void writer_work_thread::ready_write()
             if(f.open(QIODevice::ReadOnly))
             {
                 QByteArray bytes = f.readAll();
-                bytes=make_data_packet(bytes,packet_type::t_text);
+                bytes=make_data_packet(bytes,
+                                       packet_type::t_text,
+                                       QCryptographicHash::hash(f.fileName().toStdString().c_str(),
+                                                                QCryptographicHash::Sha256));
                 if(bytes.size())
                 {
                     if(send_packet_data(bytes))

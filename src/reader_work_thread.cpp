@@ -57,20 +57,25 @@ void reader_work_thread::ready_read()
     }
 
     if(true == result)
-    {
+    {        
        qint64 num_bytes;
+       QByteArray identifer;
        if((num_bytes=socket->bytesAvailable()))
         {
             if(num_bytes>8)
             {                
                 QByteArray ptype = socket->read(sizeof (int));
                 QByteArray psize = socket->read(sizeof (int));
+                QByteArray idsize = socket->read(sizeof (int));
 
                 int type = *reinterpret_cast<const int*>
                         (ptype.data());
 
                 const int size = *reinterpret_cast<const int*>
                         (psize.data());
+
+                const int identifer_size = *reinterpret_cast<const int*>
+                        (idsize.data());
 
                 QByteArray pdata;
                 pdata.resize(size);
@@ -98,6 +103,16 @@ void reader_work_thread::ready_read()
                          {
                              qDebug() << "completed data read - "
                                       << num_read;
+
+                             qDebug() << "reading idetifier";
+                             identifer = socket->read(identifer_size);
+                             if(identifer.size() != identifer_size)
+                             {
+                                 qDebug() << "error reading identifer -> identifier_size == "
+                                          << identifer_size
+                                          << " identifier.size() == "
+                                          << identifer.size();
+                             }
                              break;
                          }
                          else
@@ -135,10 +150,17 @@ void reader_work_thread::ready_read()
                          << num_read
                          << " bytes from socket";
 
+                qDebug() << "identifier_size == "
+                         << identifer_size
+                         << " identifier.size() == "
+                         << identifer.size();
+
                 bool read_error = false;
-                if(size != num_read)
+                if((size != num_read) || (identifer.size() != identifer_size))
                 {
                   read_error = true;
+                  qDebug() << "error occured: "
+                              "(size != num_read) || (identifer.size() != identifer_size) ";
                 }
 
                 switch(type)

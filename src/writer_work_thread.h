@@ -30,7 +30,7 @@ public:
     virtual void set_params(QTcpSocket* );
     virtual bool is_task_completed();
     virtual void run();
-    QByteArray make_data_packet(const QByteArray b, packet_type t);
+    QByteArray make_data_packet(const QByteArray &b, packet_type t, const QByteArray& identifier);
     void process_data_packet(const text_data_packet &data);
     void process_data_packet(const voice_data_packet &data);
     void process_data_packet(const markup_data_packet &data);
