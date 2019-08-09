@@ -85,6 +85,20 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./unverified_video_data"));
     dir.mkdir(QString("./unverified_av_data"));
 
+    dir.mkdir(QString("./send_error_voice_data"));
+    dir.mkdir(QString("./send_error_text_data"));
+    dir.mkdir(QString("./send_error_map_markup_data"));
+    dir.mkdir(QString("./send_error_image_data"));
+    dir.mkdir(QString("./send_error_video_data"));
+    dir.mkdir(QString("./send_error_av_data"));
+
+    dir.mkdir(QString("./recv_error_voice_data"));
+    dir.mkdir(QString("./recv_error_text_data"));
+    dir.mkdir(QString("./recv_error_map_markup_data"));
+    dir.mkdir(QString("./recv_error_image_data"));
+    dir.mkdir(QString("./recv_error_video_data"));
+    dir.mkdir(QString("./recv_error_av_data"));
+
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),
             this,
@@ -104,7 +118,6 @@ messenger_dialog::messenger_dialog(
             SIGNAL(released()),
             this,
             SLOT(text_transmit_button_released()));
-
 
     connect(ui->video_transmit_pushButton,
             SIGNAL(pressed()),
