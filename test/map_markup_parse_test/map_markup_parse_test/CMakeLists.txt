@@ -34,9 +34,9 @@ include_directories(
 set(test_SOURCES "main.cpp"
                  "mainwindow.h"
                  "mainwindow.cpp"
-                 "/home/amnesia/Persistent/github/msg-util/msg-util/src/map_markup_post.cpp"
-                 "/home/amnesia/Persistent/github/msg-util/msg-util/src/map_markup_post.h"
-                 "/home/amnesia/Persistent/github/msg-util/msg-util/src/map_markup_post_interface.h"
+                 "../src/map_markup_post.cpp"
+                 "../src/map_markup_post.h"
+                 "../src/map_markup_post_interface.h"
                  "mainwindow.ui")
 
 add_executable(map_markup_parse_data_test ${test_SOURCES})
