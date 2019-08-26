@@ -14,13 +14,56 @@ class map_widget : public MarbleWidget, public map_widget_interface
     friend class map_paint_layer;
 
     Q_OBJECT
+
 public:
     map_widget(QWidget *parent);
     virtual ~map_widget();
 
     void drawPoint(const QPoint point);
+
     virtual void centerOn( const qreal lon, const qreal lat,
                            bool animated = false );
+    /**
+     * @brief Return the current zoom amount.
+     */
+    virtual int zoom()  { return MarbleWidget::zoom(); }
+
+    /**
+     * @brief  Zoom the view to a certain zoomlevel
+     * @param  zoom  the new zoom level.
+     *
+     * The zoom level is an abstract value without physical
+     * interpretation.  A zoom value around 1000 lets the viewer see
+     * all of the earth in the default window.
+     */
+    virtual void setZoom( int zoom, FlyToMode mode = Instant ) { MarbleWidget::setZoom(zoom,mode); }
+
+    /**
+     * @brief Get the screen coordinates corresponding to geographical coordinates in the widget.
+     * @param lon    the lon coordinate of the requested pixel position
+     * @param lat    the lat coordinate of the requested pixel position
+     * @param x      the x coordinate of the pixel is returned through this parameter
+     * @param y      the y coordinate of the pixel is returned through this parameter
+     * @return @c true  if the geographical coordinates are visible on the screen
+     *         @c false if the geographical coordinates are not visible on the screen
+     */
+    virtual bool screenCoordinates( qreal lon, qreal lat,
+                            qreal& x, qreal& y ) const
+    {
+       return MarbleWidget::screenCoordinates(lon,lat,x,y);
+    }
+
+    /**
+     * @brief Return the longitude of the center point.
+     * @return The longitude of the center point in degree.
+     */
+    virtual qreal centerLongitude() const { return MarbleWidget::centerLongitude(); }
+
+    /**
+     * @brief Return the latitude of the center point.
+     * @return The latitude of the center point in degree.
+     */
+    virtual qreal centerLatitude() const { return MarbleWidget::centerLatitude(); }
 
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mousePressEvent(QMouseEvent *event);
@@ -29,6 +72,7 @@ public:
     virtual QWidget* map_dispaly_widget();
     virtual void map_enable_scibble(bool status = false);
     virtual void map_disable_scibble();
+
     virtual map_paint_layer* get_map_widget_paint_layer()
     {
         return paint_layer;
@@ -85,7 +129,6 @@ public slots:
     void on_highlightedPlacemarksChanged( qreal lon, qreal lat, GeoDataCoordinates::Unit unit );
 
  protected:
-
      virtual bool event(QEvent *event);
     /**
      * @brief Reimplementation of the leaveEvent() function in QWidget.
@@ -127,8 +170,6 @@ private:
     Projection current_projection;
     QString geoposition;
     qreal unit_click_lat, unit_click_lon;
-
-
     QPoint lastPoint;
     QPoint endPoint;
     bool   scribbling;

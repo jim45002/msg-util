@@ -18,9 +18,8 @@ find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 
 
-include_directories(${QT_INCLUDES} /usr/local/include/marble /usr/local/include)
-
-link_directories( /usr/local/lib )
+include_directories(${QT_INCLUDES})
+link_directories(/usr/local/lib)
 
 QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 
@@ -35,6 +34,8 @@ set(map_scribble_widget_factory_SOURCES
     "map_widget_interface.h"
     "map_paint_layer.h"
     "scribble_manager.h"
+    "marble_map_layer.h"
+    "marble_map_layer.cpp"
     ${RES_SOURCES})
 
 add_library(map_scribble_widget_factory SHARED
