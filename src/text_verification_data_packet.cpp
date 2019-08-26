@@ -3,17 +3,17 @@
 #include <QFile>
 #include <QDebug>
 
-#include "verification_data_packet.h"
+#include "text_verification_data_packet.h"
 
-verification_data_packet::verification_data_packet()
+text_verification_data_packet::text_verification_data_packet()
 {
 
 }
 
-void verification_data_packet::set_identifier(QByteArray &id)
+void text_verification_data_packet::set_identifier(QByteArray &id)
 {
    identifier = id;
-   QString filename = QString("./outgoing_verified/") + QString(identifier) + ".id";
+   QString filename = QString("./outgoing_verified_text_data") + QString(identifier) + ".id";
    QFile file(filename);
    if(file.open(QIODevice::WriteOnly))
    {

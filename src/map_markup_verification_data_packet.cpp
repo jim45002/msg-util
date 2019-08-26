@@ -3,17 +3,17 @@
 #include <QFile>
 #include <QDebug>
 
-#include "verification_data_packet.h"
+#include "map_markup_verification_data_packet.h"
 
-verification_data_packet::verification_data_packet()
+map_markup_verification_data_packet::map_markup_verification_data_packet()
 {
 
 }
 
-void verification_data_packet::set_identifier(QByteArray &id)
+void map_markup_verification_data_packet::set_identifier(QByteArray &id)
 {
    identifier = id;
-   QString filename = QString("./outgoing_verified/") + QString(identifier) + ".id";
+   QString filename = QString("./outgoing_verified_map_markup_data") + QString(identifier) + ".id";
    QFile file(filename);
    if(file.open(QIODevice::WriteOnly))
    {

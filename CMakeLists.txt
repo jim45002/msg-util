@@ -81,10 +81,33 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/recv_error_data_packet.h"
                       "./src/recv_error_data_packet.cpp"                     
                       "./src/verification_data_packet.h"
-                      "./src/verification_data_packet.cpp")
-
-
+                      "./src/verification_data_packet.cpp"
+                      "./src/text_verification_data_packet.h"
+                      "./src/text_verification_data_packet.cpp"
+                      "./src/voice_verification_data_packet.h"
+                      "./src/voice_verification_data_packet.cpp"
+                      "./src/image_verification_data_packet.h"
+                      "./src/image_verification_data_packet.cpp"
+                      "./src/map_markup_verification_data_packet.h"
+                      "./src/map_markup_verification_data_packet.cpp"
+                      "./src/recv_error_map_markup_data_packet.h"
+                      "./src/recv_error_map_markup_data_packet.cpp"
+                      "./src/recv_error_text_data_packet.h"
+                      "./src/recv_error_text_data_packet.cpp"
+                      "./src/recv_error_video_data_packet.h"
+                      "./src/recv_error_video_data_packet.cpp"
+                      "./src/recv_error_image_data_packet.h"
+                      "./src/recv_error_image_data_packet.cpp"
+                      "./src/recv_error_map_markup_data_packet.h"
+                      "./src/send_error_map_markup_data_packet.cpp"
+                      "./src/send_error_text_data_packet.h"
+                      "./src/send_error_text_data_packet.cpp"
+                      "./src/send_error_video_data_packet.h"
+                      "./src/send_error_video_data_packet.cpp"
+                      "./src/send_error_image_data_packet.h"
+                      "./src/send_error_image_data_packet.cpp")
                        
+
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
                                 map_scribble_widget_factory qwt speex speexdsp

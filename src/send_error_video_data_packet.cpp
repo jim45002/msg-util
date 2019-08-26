@@ -3,17 +3,17 @@
 #include <QFile>
 #include <QDebug>
 
-#include "send_error_data_packet.h"
+#include "send_error_video_data_packet.h"
 
-send_error_data_packet::send_error_data_packet()
+send_error_video_data_packet::send_error_video_data_packet()
 {
 
 }
 
-void send_error_data_packet::set_identifier(QByteArray &id)
+void send_error_video_data_packet::set_identifier(QByteArray &id)
 {
     identifier = id;
-    QString filename = QString("./send_error_data/") + QString(identifier) + ".id";
+    QString filename = QString("./send_error_video_data/") + QString(identifier) + ".id";
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly))
     {

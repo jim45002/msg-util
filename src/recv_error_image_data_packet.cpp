@@ -1,19 +1,18 @@
-#include <QByteArray>
 #include <QDateTime>
 #include <QFile>
 #include <QDebug>
 
-#include "send_error_data_packet.h"
+#include "recv_error_image_data_packet.h"
 
-send_error_data_packet::send_error_data_packet()
+recv_error_image_data_packet::recv_error_image_data_packet()
 {
 
 }
 
-void send_error_data_packet::set_identifier(QByteArray &id)
+void recv_error_image_data_packet::set_identifier(QByteArray &id)
 {
     identifier = id;
-    QString filename = QString("./send_error_data/") + QString(identifier) + ".id";
+    QString filename = QString("./recv_error_image_data/") + QString(identifier) + ".id";
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly))
     {

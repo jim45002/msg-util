@@ -40,6 +40,7 @@ void audio_read_thread::run()
     if(file.open(QIODevice::ReadOnly))
     {
         QByteArray buff;
+        qint64 size = 0;
         while(1)
         {
             if(should_stop_running == true)
@@ -51,11 +52,17 @@ void audio_read_thread::run()
                 }
                 break;
             }
-            buff += file.read(128-buff.length());
-            if(buff.length()<128)
-                continue;
-            emit new_buffer_data(buff.data(),buff.length());
-            buff.clear();
+            else
+            {
+               if(file.size()<(128+size))
+               {
+                 buff += file.read(128 - (size+=buff.size()));
+                 if(buff.length() < 128)
+                    continue;
+                 emit new_buffer_data(buff.data(),buff.length());
+                 buff.clear();
+               }
+            }
         }
     }
     else
