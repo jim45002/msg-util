@@ -26,6 +26,7 @@ set(SOURCE_DIR ./src)
 find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt5Multimedia CONFIG REQUIRED)
 
 
 #QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
@@ -82,6 +83,4 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/map_markup_post.cpp")
                        
 add_executable(msg_util ${msg_util_SOURCES})
-target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia
-                                map_scribble_widget_factory qwt speex speexdsp
-                                cameraWidget)
+target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia map_scribble_widget_factory qwt speex speexdsp cameraWidget)
