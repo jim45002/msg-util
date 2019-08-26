@@ -1,9 +1,15 @@
 #include "map_widget.h"
 #include <QWidget>
+#include <QColor>
+#include <marble/GeoPainter.h>
+#include <marble/GeoDataLineString.h>
 #include <marble/GeoPainter.h>
 #include <QMouseEvent>
 #include <QHBoxLayout>
 #include "map_paint_layer.h"
+#include "scribble_manager.h"
+
+using namespace Marble;
 
 map_widget::map_widget(QWidget* parent)
     : Marble::MarbleWidget(parent), parentWidget(parent)
@@ -86,13 +92,13 @@ void map_widget::on_projectionChanged(Projection)
 
 void map_widget::mouseMoveEvent(QMouseEvent *event)
 {
- //   Marble::MarbleWidget::mouseMoveEvent (event);
+   Marble::MarbleWidget::mouseMoveEvent (event);
  //   qDebug() << "void map_widget::mouseMoveEvent(QMouseEvent *event)";
 }
 
 void map_widget::mousePressEvent(QMouseEvent *event)
 {
- // Marble::MarbleWidget::mousePressEvent (event);
+  Marble::MarbleWidget::mousePressEvent (event);
  //   qDebug() << "void map_widget::mousePressEvent(QMouseEvent *event)";
 }
 

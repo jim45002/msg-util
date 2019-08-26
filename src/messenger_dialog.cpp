@@ -472,7 +472,17 @@ void messenger_dialog::save_map_markup()
   map_text_buffer.append(reinterpret_cast<char*>(&size),sizeof(int));
   map_text_buffer.append(tmp);
 
-  QByteArray complete_map_data_buffer = map_lines_buffer + map_text_buffer;
+  QByteArray map_scale_data_buffer;
+
+  int zoom = mwfi->zoom();
+  qreal lat = mwfi->centerLatitude();
+  qreal lon = mwfi->centerLongitude();
+
+  map_scale_data_buffer.append(reinterpret_cast<char*>(&lat),sizeof(qreal));
+  map_scale_data_buffer.append(reinterpret_cast<char*>(&lon),sizeof(qreal));
+  map_scale_data_buffer.append(reinterpret_cast<char*>(&zoom),sizeof(int));
+
+  QByteArray complete_map_data_buffer = map_lines_buffer + map_text_buffer + map_scale_data_buffer;
 
   QString filename = "./outgoing_map_markup_data/map_markup_data_" +
                      (QDateTime::currentDateTime().toString().remove(' ')) +
@@ -651,7 +661,6 @@ void messenger_dialog::timer_timedout()
 
         for(auto file : files)
         {
-
             QString filename(QString("./incoming_map_markup_data/")+file);
 
             QString command = "bzip2";
@@ -702,7 +711,6 @@ void messenger_dialog::timer_timedout()
                             data_stream.readRawData(int_bytes,sizeof(int_bytes));
                             int number_of_lines =
                                     *reinterpret_cast<int*>(int_bytes);
-
 
                             for(int num_lines=0;num_lines<number_of_lines;
                                 ++num_lines)
