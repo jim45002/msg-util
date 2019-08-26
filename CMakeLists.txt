@@ -17,7 +17,7 @@ include_directories(
         ./libs/camera_widget_factory/
                    )
 
-link_directories( /home/amnesia/Persistent/github/libs/qwt/build-qwt-Desktop_Qt_5_9_7_GCC_64bit-Debug/lib
+link_directories(
                   ../../libs/speex-1.2
                   ../../libs/speex-1.2/libspeex/.libs
                  )
