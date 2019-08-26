@@ -14,7 +14,7 @@ include_directories(
        ${QT_INCLUDES}
         ../../libs/qwt/qwt-6.1.3/src
         ./libs/map_widget_factory
-        ./libs/camera_widget_factory
+        ./libs/camera_widget_factory/
                    )
 
 link_directories( ../../libs/qwt/build/lib
@@ -23,6 +23,7 @@ link_directories( ../../libs/qwt/build/lib
 
 set(SOURCE_DIR ./src)
 
+find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
 
@@ -75,9 +76,12 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/incoming_av_data_sync.cpp"
                       "./src/incoming_av_data_sync_interface.h"
                       "./src/video_data_packet.h"
-                      "./src/video_data_packet.cpp")
+                      "./src/video_data_packet.cpp"
+                      "./src/map_markup_post_interface.h"
+                      "./src/map_markup_post.h"
+                      "./src/map_markup_post.cpp")
                        
 add_executable(msg_util ${msg_util_SOURCES})
-target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets
+target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia
                                 map_scribble_widget_factory qwt speex speexdsp
                                 cameraWidget)

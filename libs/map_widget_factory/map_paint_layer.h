@@ -24,19 +24,19 @@ class map_paint_layer : public QWidget
     Q_OBJECT
 
 public:
-    explicit map_paint_layer(map_widget *parent = 0);
+    explicit map_paint_layer(map_widget *parent = nullptr);
+
     void setPenColor(const QColor &newColor);
     void setPenWidth(int newWidth);
     bool isModified() const;
     QColor penColor() const { return myPenColor; }
     int penWidth() const { return myPenWidth; }
-    std::shared_ptr<scribble_manager>
-    get_scribble_manager() { return scribble_mgr; }
+    std::shared_ptr<scribble_manager> get_scribble_manager() { return scribble_mgr; }
     void penColor_dialog();
     void penWidth_dialog();
     void penText_dialog();
-
-    void drawText(QString text, QPoint p, int width, QColor color, QFont font, bool remember = true);
+    void drawText(QString text, QPoint p, int width, QColor color, QFont font,
+                  bool remember = true);
     void penFont_dialog();
 
 public slots:

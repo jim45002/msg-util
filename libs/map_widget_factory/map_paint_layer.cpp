@@ -62,7 +62,10 @@ void map_paint_layer::penText_dialog()
                                         tr("Enter text"), QLineEdit::Normal,
                                         "", &ok);
    if (ok && !text.isEmpty())
+   {
        drawText(text,last_right_click_point,myPenWidth,myPenColor,my_font);
+
+   }
 }
 
 void map_paint_layer::penFont_dialog()
@@ -184,21 +187,37 @@ void map_paint_layer::resizeEvent(QResizeEvent *event)
 
 void map_paint_layer::drawLine(QLine line, int width, QColor color, bool remember)
 {
-    QPainter painter(this);
-    QPen pen;
-    pen.setWidth (width);
-    pen.setColor (color);
-    painter.setPen(pen);
-    painter.drawLine(line);
     if(remember)
     {
         scribble_mgr->add_line (width,color,line);
+        modified = true;
     }
-    modified = true;
 
-    int rad = (myPenWidth / 2) + 2;
-    update(QRect(line.p1 (), line.p2 ()).normalized()
+     QPainter painter(this);
+     QPen pen;
+     pen.setWidth (width);
+     pen.setColor (color);
+     painter.setPen(pen);
+
+     qreal center_lat = parentWidget->centerLatitude();
+     qreal center_lon = parentWidget->centerLongitude();
+
+     qreal x, y;
+     parentWidget->screenCoordinates(center_lon,center_lat,x,y);
+
+     QLine workLine(QPoint(line.p1().x()+x,line.p1().y()+y), QPoint(line.p2().x()+x,line.p2().y()+y));
+     line.p1().setX(line.p1().x()+x);
+     line.p1().setY(line.p1().y()+y);
+
+     line.p2().setX(line.p2().x()+x);
+     line.p2().setY(line.p2().y()+y);
+
+     painter.drawLine(workLine);
+
+     int rad = (myPenWidth / 2) + 2;
+     update(QRect(workLine.p1 (), workLine.p2 ()).normalized()
                                      .adjusted(-rad, -rad, +rad, +rad));
+
 }
 
 void map_paint_layer::drawText(QString text, QPoint p, int width, QColor color, QFont font, bool remember)
@@ -209,7 +228,7 @@ void map_paint_layer::drawText(QString text, QPoint p, int width, QColor color, 
     pen.setColor (color);
     painter.setPen(pen);
     painter.setFont (font);
-    painter.drawText (p,text);
+   // painter.drawText (p,text);
 
     if(remember)
        scribble_mgr->add_text (text,p,width,color,font);
@@ -226,16 +245,20 @@ void map_paint_layer::mousePressEvent(QMouseEvent *event)
     {
         lastPoint = event->pos();
         qreal lat=0,  lon=0;
-        parentWidget->geoCoordinates(lastPoint.x(), lastPoint.y(), lon, lat);
+        if(parentWidget->geoCoordinates(lastPoint.x(), lastPoint.y(), lon, lat))
+        {
+        }
+        else
+        {
+        }
         scribbling = true;
-         // qDebug() << "lat " << lat << " " << "lon " << lon;
     }
     else
     {
         if (event->button() == Qt::RightButton)
         {
             last_right_click_point = event->pos();
-            map_layer_menu->exec (mapToGlobal (event->pos()));
+            map_layer_menu->exec(event->pos());
         }
     }
 }
@@ -249,9 +272,22 @@ void map_paint_layer::mouseMoveEvent(QMouseEvent *event)
 {
     if ((event->buttons() & Qt::LeftButton) && scribbling)
     {
-        QPoint curr = event->pos ();
-        drawLine(QLine(lastPoint,event->pos()),myPenWidth,myPenColor);
-        lastPoint = curr;
+        qreal center_lat = parentWidget->centerLatitude();
+        qreal center_lon = parentWidget->centerLongitude();
+        qreal x, y;
+        parentWidget->screenCoordinates(center_lon,center_lat,x,y);
+
+        QPoint curr = event->pos();
+
+        curr.setX(curr.x()-x);
+        curr.setY(curr.y()-y);
+
+        lastPoint.setX(lastPoint.x()-x);
+        lastPoint.setY(lastPoint.y()-y);
+
+        drawLine(QLine(lastPoint,curr),myPenWidth,myPenColor);
+
+        lastPoint = event->pos();
     }
     QWidget::mouseMoveEvent (event);
 }
@@ -260,8 +296,21 @@ void map_paint_layer::mouseReleaseEvent(QMouseEvent *event)
 {
     if ((event->buttons() & Qt::LeftButton) && scribbling)
     {
-        QPoint curr = event->pos ();
-        drawLine(QLine(lastPoint,event->pos()),myPenWidth,myPenColor);
-        lastPoint = curr;
+        qreal center_lat = parentWidget->centerLatitude();
+        qreal center_lon = parentWidget->centerLongitude();
+
+        qreal x, y;
+        parentWidget->screenCoordinates(center_lon,center_lat,x,y);
+
+        QPoint curr = event->pos();
+        curr.setX(curr.x()-x);
+        curr.setY(curr.y()-y);
+
+        lastPoint.setX(lastPoint.x()-x);
+        lastPoint.setY(lastPoint.y()-y);
+
+        drawLine(QLine(lastPoint,curr),myPenWidth,myPenColor);
+
+        lastPoint = event->pos();
     }
 }
