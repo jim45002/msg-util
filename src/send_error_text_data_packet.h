@@ -6,7 +6,7 @@
 class send_error_text_data_packet
 {
 public:
-    send_error_text_data_packet();
+    send_error_text_data_packet(QByteArray& data);
     virtual ~send_error_text_data_packet() { }
 
     void set_identifier(QByteArray& id);

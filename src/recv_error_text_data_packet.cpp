@@ -4,7 +4,7 @@
 
 #include "recv_error_text_data_packet.h"
 
-recv_error_text_data_packet::recv_error_text_data_packet()
+recv_error_text_data_packet::recv_error_text_data_packet(QByteArray& data)
 {
 
 }

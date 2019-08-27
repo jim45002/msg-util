@@ -1,4 +1,4 @@
-
+﻿
 #include <QTcpSocket>
 
 #include "packet_types.h"
@@ -7,6 +7,8 @@
 #include "markup_data_packet.h"
 #include "image_data_packet.h"
 #include "reader_work_thread.h"
+#include "recv_error_text_data_packet.h"
+#include "send_error_text_data_packet.h"
 
 reader_work_thread::reader_work_thread(QObject* p)
     : reader_work_thread_interface(p),
@@ -205,6 +207,18 @@ void reader_work_thread::ready_read()
                    }
                 }
                 break;
+                case packet_type::t_recv_text_error:
+                {
+                   recv_error_text_data_packet m(pdata);
+                   process_data_packet(m);
+                }
+                break;
+                case packet_type::t_send_text_error:
+                {
+                   send_error_text_data_packet m(pdata);
+                   process_data_packet(m);
+                }
+                break;
                 default:
                 {
                    qDebug() << "packet type not recognized";
@@ -246,3 +260,12 @@ void reader_work_thread::process_data_packet(const markup_data_packet& )
 
 }
 
+void reader_work_thread::process_data_packet(const recv_error_text_data_packet& )
+{
+
+}
+
+void reader_work_thread::process_data_packet(const send_error_text_data_packet& )
+{
+
+}

@@ -5,7 +5,7 @@
 
 #include "send_error_text_data_packet.h"
 
-send_error_text_data_packet::send_error_text_data_packet()
+send_error_text_data_packet::send_error_text_data_packet(QByteArray &data)
 {
 
 }
