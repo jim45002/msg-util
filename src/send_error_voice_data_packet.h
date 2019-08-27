@@ -6,7 +6,7 @@
 class send_error_voice_data_packet
 {
 public:
-    send_error_voice_data_packet(QByteArray id);
+    send_error_voice_data_packet(QByteArray);
     virtual ~send_error_voice_data_packet() { }
 
     void set_identifier(QByteArray& id);

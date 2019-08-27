@@ -307,12 +307,12 @@ void reader_work_thread::process_data_packet(const image_data_packet& )
 
 void reader_work_thread::process_data_packet(const text_data_packet& )
 {
-
+   emit received_data_status("peer notification - text message data packet error");
 }
 
 void reader_work_thread::process_data_packet(const voice_data_packet& )
 {
-
+   emit received_data_status("peer notification - voice message data packet error");
 }
 
 void reader_work_thread::process_data_packet(const markup_data_packet& )
