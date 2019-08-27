@@ -19,6 +19,12 @@ public:
 
 signals:
     void received_data_status(QString);
+    void recv_error(QString);
+    void recv_verify(QString);
+
+public slots:
+    virtual void ready_read() = 0;
+
 };
 
 #endif // READER_WORK_THREAD_INTERFACE_H

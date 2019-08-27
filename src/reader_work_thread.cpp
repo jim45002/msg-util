@@ -167,6 +167,10 @@ void reader_work_thread::ready_read()
                   qDebug() << "error occured: "
                               "(size != num_read) || (identifer.size() != identifer_size) ";
                 }
+                else
+                {
+                  emit recv_verify("successfully read data packet of type " + QString::number(packet_type(type)));
+                }
 
                 if(!read_error)
                 {

@@ -60,30 +60,27 @@ messenger_dialog::messenger_dialog(
     QDir dir;
     dir.mkdir(QString("./outgoing_voice_data"));
     dir.mkdir(QString("./outgoing_text_data"));
+    dir.mkdir(QString("./outgoing_map_markup_data"));
+    dir.mkdir(QString("./outgoing_video_data"));
+    dir.mkdir(QString("./outgoing_image_data"));
+
     dir.mkdir(QString("./incoming_voice_data"));
     dir.mkdir(QString("./incoming_text_data"));
     dir.mkdir(QString("./incoming_map_markup_data"));
-    dir.mkdir(QString("./outgoing_map_markup_data"));
-    dir.mkdir(QString("./incoming_image_data"));
-    dir.mkdir(QString("./outgoing_image_data"));
     dir.mkdir(QString("./incoming_video_data"));
-    dir.mkdir(QString("./outgoing_video_data"));
-    dir.mkdir(QString("./outgoing_av_data"));
-    dir.mkdir(QString("./incoming_av_data"));
+    dir.mkdir(QString("./incoming_image_data"));
 
     dir.mkdir(QString("./outgoing_verified_voice_data"));
     dir.mkdir(QString("./outgoing_verified_text_data"));
     dir.mkdir(QString("./outgoing_verified_map_markup_data"));
     dir.mkdir(QString("./outgoing_verified_image_data"));
     dir.mkdir(QString("./outgoing_verified_video_data"));
-    dir.mkdir(QString("./outgoing_verified_av_data"));
 
     dir.mkdir(QString("./unverified_voice_data"));
     dir.mkdir(QString("./unverified_text_data"));
     dir.mkdir(QString("./unverified_map_markup_data"));
     dir.mkdir(QString("./unverified_image_data"));
     dir.mkdir(QString("./unverified_video_data"));
-    dir.mkdir(QString("./unverified_av_data"));
 
     dir.mkdir(QString("./send_error_data"));
     dir.mkdir(QString("./send_error_voice_data"));
@@ -91,7 +88,6 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./send_error_map_markup_data"));
     dir.mkdir(QString("./send_error_image_data"));
     dir.mkdir(QString("./send_error_video_data"));
-    dir.mkdir(QString("./send_error_av_data"));
 
     dir.mkdir(QString("./recv_error_data"));
     dir.mkdir(QString("./recv_error_voice_data"));
@@ -99,7 +95,6 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./recv_error_map_markup_data"));
     dir.mkdir(QString("./recv_error_image_data"));
     dir.mkdir(QString("./recv_error_video_data"));
-    dir.mkdir(QString("./recv_error_av_data"));
 
     connect(data_recv_inter,
             SIGNAL(received_data_status(QString)),

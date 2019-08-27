@@ -19,7 +19,7 @@ signals:
 
 public slots:
     virtual void on_recv_error(QString) = 0;
-
+    virtual void on_recv_verify(QString) = 0;
 };
 
 #endif // DATA_RECEIVER_INTERFACE_H

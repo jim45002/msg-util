@@ -27,7 +27,7 @@ find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
 find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Multimedia CONFIG REQUIRED)
-
+find_package(Qt5PrintSupport CONFIG REQUIRED)
 
 #QT5_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 

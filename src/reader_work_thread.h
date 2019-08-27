@@ -48,14 +48,11 @@ public:
 
     void process_data_packet(const recv_error_text_data_packet &);
     void process_data_packet(const send_error_voice_data_packet &);
-signals:
-    void recv_error(QString msg);
 
 public slots:
     virtual void ready_read();
 
 private:
-
     QTcpSocket* socket;
     QList<image_data_packet> image_packets;
     QList<text_data_packet> text_packets;
