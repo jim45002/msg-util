@@ -212,7 +212,18 @@ void writer_work_thread::ready_write()
 
                 if(send_packet_data(bytes))
                 {
-                   f.remove();
+                   if(f.copy("./unverified_image_data/"+file))
+                   {
+                       f.remove();
+                   }
+                   else
+                   {
+                       qDebug() << "unable to copy image file to unverified";
+                   }
+                }
+                else
+                {
+                    qDebug() << "error sending image data";
                 }
             }
             else
@@ -247,7 +258,18 @@ void writer_work_thread::ready_write()
                 {
                     if(send_packet_data(bytes))
                     {
-                       f.remove();
+                        if(f.copy("./unverified_map_markup_data/"+file))
+                        {
+                            f.remove();
+                        }
+                        else
+                        {
+                            qDebug() << "unable to copy map markup file to unverified";
+                        }
+                    }
+                    else
+                    {
+                        qDebug() << "error sending map markup data";
                     }
                 }
             }
@@ -286,7 +308,18 @@ void writer_work_thread::ready_write()
                 {
                     if(send_packet_data(bytes))
                     {
-                       f.remove();
+                        if(f.copy("./unverified_voice_data/"+file))
+                        {
+                            f.remove();
+                        }
+                        else
+                        {
+                            qDebug() << "unable to copy voice file to unverified";
+                        }
+                    }
+                    else
+                    {
+                        qDebug() << "error sending voice data";
                     }
                 }
             }
@@ -322,7 +355,18 @@ void writer_work_thread::ready_write()
                 {
                     if(send_packet_data(bytes))
                     {
-                       f.remove();
+                        if(f.copy("./unverified_text_data/"+file))
+                        {
+                            f.remove();
+                        }
+                        else
+                        {
+                            qDebug() << "unable to copy text file to unverified";
+                        }
+                    }
+                    else
+                    {
+                        qDebug() << "error sending text data";
                     }
                  }
             }
@@ -337,7 +381,6 @@ void writer_work_thread::ready_write()
     send_map_markup_data();
     send_text_data();
     send_voice_data();
-
 }
 
 

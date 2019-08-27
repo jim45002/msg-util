@@ -85,6 +85,7 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./unverified_video_data"));
     dir.mkdir(QString("./unverified_av_data"));
 
+    dir.mkdir(QString("./send_error_data"));
     dir.mkdir(QString("./send_error_voice_data"));
     dir.mkdir(QString("./send_error_text_data"));
     dir.mkdir(QString("./send_error_map_markup_data"));
@@ -92,12 +93,18 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./send_error_video_data"));
     dir.mkdir(QString("./send_error_av_data"));
 
+    dir.mkdir(QString("./recv_error_data"));
     dir.mkdir(QString("./recv_error_voice_data"));
     dir.mkdir(QString("./recv_error_text_data"));
     dir.mkdir(QString("./recv_error_map_markup_data"));
     dir.mkdir(QString("./recv_error_image_data"));
     dir.mkdir(QString("./recv_error_video_data"));
     dir.mkdir(QString("./recv_error_av_data"));
+
+    connect(data_recv_inter,
+            SIGNAL(received_data_status(QString)),
+            this,
+            SLOT(on_recv_data_error(QString)));
 
     connect(ui->voice_transmit_pushButton,
             SIGNAL(pressed()),
@@ -128,7 +135,6 @@ messenger_dialog::messenger_dialog(
             SIGNAL(released()),
             this,
             SLOT(video_transmit_button_released()));
-
 
     connect(ui->enable_scribble_checkBox,
             SIGNAL(clicked(bool)),
@@ -218,7 +224,6 @@ messenger_dialog::messenger_dialog(
             create(csi.get(),
                    camera_widget_factory::remote,
                    ui->stream1_graphicsView);
-
 
     incoming_plot = create_plot_widget(ui->incoming_plot_widget);
     QSizePolicy incoming_sizePolicy(QSizePolicy::Preferred,
@@ -311,6 +316,11 @@ void messenger_dialog::radio_button_clicked(bool)
     {
         ui->freq_spinBox->setSingleStep(1000000000);
     }
+}
+
+void messenger_dialog::on_recv_data_error(QString)
+{
+
 }
 
 void messenger_dialog::freq_slider_moved(int)

@@ -1,5 +1,9 @@
 ﻿
 #include <QTcpSocket>
+#include <QFile>
+#include <QDir>
+#include <QDataStream>
+#include <QCryptographicHash>
 
 #include "packet_types.h"
 #include "text_data_packet.h"
@@ -7,8 +11,7 @@
 #include "markup_data_packet.h"
 #include "image_data_packet.h"
 #include "reader_work_thread.h"
-#include "recv_error_text_data_packet.h"
-#include "send_error_text_data_packet.h"
+
 
 reader_work_thread::reader_work_thread(QObject* p)
     : reader_work_thread_interface(p),
@@ -70,7 +73,7 @@ void reader_work_thread::ready_read()
                 QByteArray psize = socket->read(sizeof (int));
                 QByteArray idsize = socket->read(sizeof (int));
 
-                int type = *reinterpret_cast<const int*>
+                const int type = *reinterpret_cast<const int*>
                         (ptype.data());
 
                 const int size = *reinterpret_cast<const int*>
@@ -154,8 +157,8 @@ void reader_work_thread::ready_read()
 
                 qDebug() << "identifier_size == "
                          << identifer_size
-                         << " identifier.size() == "
-                         << identifer.size();
+                         << " identifier == "
+                         << identifer;
 
                 bool read_error = false;
                 if((size != num_read) || (identifer.size() != identifer_size))
@@ -165,80 +168,137 @@ void reader_work_thread::ready_read()
                               "(size != num_read) || (identifer.size() != identifer_size) ";
                 }
 
-                switch(type)
+                if(!read_error)
                 {
-                case packet_type::t_image:
-                {
-                   if(!read_error)
-                   {
-                     image_data_packet i(pdata);
-                     process_data_packet(i);
-                   }
+                    switch(type)
+                    {
+                    case packet_type::t_image:
+                    {
+                        image_data_packet i(pdata);
+                        process_data_packet(i);
+                    }
+                        break;
+                    case packet_type::t_text:
+                    {
+                        text_data_packet t(pdata);
+                        process_data_packet(t);
+                    }
+                        break;
+                    case packet_type::t_voice:
+                    {
+                        voice_data_packet v(pdata);
+                        process_data_packet(v);
+                    }
+                        break;
+                    case packet_type::t_markup:
+                    {
+                        markup_data_packet m(pdata);
+                        process_data_packet(m);
+                    }
+                        break;
+                    case packet_type::t_recv_text_error:
+                    {
+                        recv_error_text_data_packet m(pdata);
+                        process_data_packet(m);
+                    }
+                        break;
+                    case packet_type::t_send_text_error:
+                    {
+                        send_error_text_data_packet m(pdata);
+                        process_data_packet(m);
+                    }
+                        break;
+                    case packet_type::t_recv_voice_error:
+                    {
+                        recv_error_voice_data_packet m(pdata);
+                        process_data_packet(m);
+                    }
+                        break;
+                    case packet_type::t_send_voice_error:
+                    {
+                        send_error_voice_data_packet m(pdata);
+                        process_data_packet(m);
+                    }
+                        break;
+                    default:
+                    {
+                        qDebug() << "packet type not recognized";
+                        process_recv_error_packet(identifer);
+                        emit received_data_status("packet type not recognized");
+                    }
+                    }
                 }
-                break;
-                case packet_type::t_text:
+                else
                 {
-                   if(!read_error)
-                   {
-                     text_data_packet t(pdata);
-                     process_data_packet(t);
-                   }
-                }
-                break;
-                case packet_type::t_voice:
-                {
-                   if(!read_error)
-                   {
-                     voice_data_packet v(pdata);
-                     process_data_packet(v);
-                   }
-                }
-                break;
-                case packet_type::t_markup:
-                {
-                   if(!read_error)
-                   {
-                     markup_data_packet m(pdata);
-                     process_data_packet(m);
-                   }
-                   else
-                   {
-                     qDebug() << "socket read error ";
-                   }
-                }
-                break;
-                case packet_type::t_recv_text_error:
-                {
-                   recv_error_text_data_packet m(pdata);
-                   process_data_packet(m);
-                }
-                break;
-                case packet_type::t_send_text_error:
-                {
-                   send_error_text_data_packet m(pdata);
-                   process_data_packet(m);
-                }
-                break;
-                default:
-                {
-                   qDebug() << "packet type not recognized";
-                }
+                    process_recv_error_packet(identifer);
+                    emit received_data_status("error occured: (size != num_read) || "
+                                              "(identifer.size() != identifer_size)");
                 }
             }
         }
         else
         {
            qDebug() << "not enough data sent to socket";
+           process_recv_error_packet(identifer);
+           emit received_data_status("not enough data sent to socket");
         }
     }
     else
     {
         qDebug() << "timed out - waiting for peer on new connection";
+        emit received_data_status("timed out - waiting for peer on new connection");
     }
 }
 
-
 ////////////////////
+
+void reader_work_thread::process_recv_error_packet(QByteArray& identifier)
+{
+    recv_error_data_packet redp;
+    redp.set_identifier(identifier);
+
+    QDir directory;
+    directory.setFilter(QDir::Files);
+    directory.setPath(QString("./recv_error_data"));
+    directory.setSorting(QDir::Time);
+    QStringList name_filter;
+    name_filter << "*.id";
+    directory.setNameFilters(name_filter);
+    QStringList files =
+            directory.entryList(QDir::Files,QDir::Time);
+
+    for(auto file : files)
+    {
+        QFile f(QString("./recv_error_data/")+file);
+        if(f.open(QIODevice::ReadOnly))
+        {
+            QByteArray bytes = f.readAll();
+            packet_type data_packet_type = t_recv_error;
+            int packet_size = bytes.size();
+            QByteArray packet;
+            packet.append(reinterpret_cast<char*>(&data_packet_type),
+                          sizeof(int));
+            packet.append(reinterpret_cast<char*>(&packet_size),sizeof (int));
+            int id_size = identifier.size();
+            packet.append(reinterpret_cast<char*>(&id_size),sizeof (int));
+            packet.append(bytes.data(),packet_size);
+            packet.append(identifier.data(),identifier.size());
+            if(bytes.size())
+            {
+                if(socket->write(bytes))
+                {
+                    f.remove();
+                    emit received_data_status("succesfully sent error status to peer");
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "unable to open file " << f.fileName();
+            emit received_data_status("unable sent error status to peer");
+        }
+    }
+}
 
 void reader_work_thread::process_data_packet(const image_data_packet& )
 {
@@ -269,3 +329,15 @@ void reader_work_thread::process_data_packet(const send_error_text_data_packet& 
 {
 
 }
+
+void reader_work_thread::process_data_packet(const recv_error_voice_data_packet& )
+{
+
+}
+
+void reader_work_thread::process_data_packet(const send_error_voice_data_packet& )
+{
+
+}
+
+

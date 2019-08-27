@@ -9,8 +9,12 @@
 #include "text_data_packet.h"
 #include "voice_data_packet.h"
 #include "markup_data_packet.h"
+
 #include "recv_error_text_data_packet.h"
 #include "send_error_text_data_packet.h"
+#include "send_error_voice_data_packet.h"
+#include "recv_error_voice_data_packet.h"
+#include "recv_error_data_packet.h"
 
 #include "reader_work_thread_interface.h"
 
@@ -38,8 +42,15 @@ public:
 
     void process_data_packet(const image_data_packet &);
     void read_packet_data(QByteArray &bytes);
-    void process_data_packet(const recv_error_text_data_packet &);
+    void process_data_packet(const recv_error_voice_data_packet &);
     void process_data_packet(const send_error_text_data_packet &);
+    void process_recv_error_packet(QByteArray &identifier);
+
+    void process_data_packet(const recv_error_text_data_packet &);
+    void process_data_packet(const send_error_voice_data_packet &);
+signals:
+    void recv_error(QString msg);
+
 public slots:
     virtual void ready_read();
 

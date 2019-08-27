@@ -45,6 +45,7 @@ data_receiver::find_worker_thread()
       if(!iter->isRunning())//connection_is_null())
       {
           r = iter;
+          connect(r.get(),SIGNAL(received_data_status(QString)),this,SLOT(on_recv_error(QString)));
           break;
       }
   }
@@ -70,4 +71,9 @@ void data_receiver::newConnection()
         qDebug() << "no threads available";
         s->close();
     }
+}
+
+void data_receiver::on_recv_error(QString msg)
+{
+   emit received_data_status(msg);
 }

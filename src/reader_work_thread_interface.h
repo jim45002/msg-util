@@ -16,6 +16,9 @@ public:
     virtual bool connection_is_null() = 0;
     virtual void set_params(QTcpSocket* ) = 0;
     virtual void run() = 0;
+
+signals:
+    void received_data_status(QString);
 };
 
 #endif // READER_WORK_THREAD_INTERFACE_H

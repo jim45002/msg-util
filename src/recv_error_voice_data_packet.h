@@ -1,13 +1,13 @@
-#ifndef RECV_ERROR_DATA_PACKET_H
-#define RECV_ERROR_DATA_PACKET_H
+#ifndef RECV_ERROR_VOICE_DATA_PACKET_H
+#define RECV_ERROR_VOICE_DATA_PACKET_H
 
 #include <QByteArray>
 
-class recv_error_data_packet
+class recv_error_voice_data_packet
 {
 public:
-    recv_error_data_packet();
-    virtual ~recv_error_data_packet() { }
+    recv_error_voice_data_packet(QByteArray id);
+    virtual ~recv_error_voice_data_packet() { }
 
     void set_identifier(QByteArray& id);
 

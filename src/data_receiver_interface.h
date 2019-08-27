@@ -18,7 +18,7 @@ signals:
     void received_data_status(QString);
 
 public slots:
-
+    virtual void on_recv_error(QString) = 0;
 
 };
 

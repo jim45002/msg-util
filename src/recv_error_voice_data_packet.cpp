@@ -2,17 +2,17 @@
 #include <QFile>
 #include <QDebug>
 
-#include "recv_error_data_packet.h"
+#include "recv_error_voice_data_packet.h"
 
-recv_error_data_packet::recv_error_data_packet()
+recv_error_voice_data_packet::recv_error_voice_data_packet(QByteArray id)
 {
 
 }
 
-void recv_error_data_packet::set_identifier(QByteArray &id)
+void recv_error_voice_data_packet::set_identifier(QByteArray &id)
 {
     identifier = id;
-    QString filename = QString("./recv_error_text_data/") + QString(identifier) + ".id";
+    QString filename = QString("./recv_error_voice_data/") + QString(identifier) + ".id";
     QFile file(filename);
     if(file.open(QIODevice::WriteOnly))
     {

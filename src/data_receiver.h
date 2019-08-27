@@ -24,6 +24,7 @@ public:
 
 public slots:
     void newConnection();
+    virtual void on_recv_error(QString);
 
 private:
    QList<std::shared_ptr
