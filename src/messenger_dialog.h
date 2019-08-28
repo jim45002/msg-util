@@ -25,12 +25,14 @@ class data_receiver_interface;
 class audio_file_player_thread;
 class data_transmitter_factory_interface;
 class data_transmitter_interface;
-
+class rf_controls_dialog;
 
 
 namespace Ui {
 class messenger_dialog;
 }
+
+
 class messenger_dialog : public QDialog
 {
     Q_OBJECT
@@ -74,6 +76,7 @@ public slots:
     void on_recv_data_error(QString);
     void on_send_verification(QString);
     void on_send_completed(QString);
+    void on_rf_control_button_clicked(bool);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;
@@ -94,6 +97,7 @@ private:
     QwtPlotCurve curve;
     QFile incoming_voice_file;
     QTimer* timer;
+    rf_controls_dialog* rf_controls;
 
 };
 

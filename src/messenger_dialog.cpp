@@ -38,6 +38,7 @@
 #include "map_widget_interface.h"
 #include "map_widget_factory.h"
 #include "ui_messenger_dialog.h"
+#include "rf_controls_dialog.h"
 #include "messenger_dialog.h"
 
 messenger_dialog::messenger_dialog(
@@ -52,6 +53,8 @@ messenger_dialog::messenger_dialog(
 
 {
     ui->setupUi(this);
+
+    rf_controls = new rf_controls_dialog(this);
 
     aud_file_player_thread =
             std::make_shared<audio_file_player_thread>
@@ -95,6 +98,11 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./recv_error_map_markup_data"));
     dir.mkdir(QString("./recv_error_image_data"));
     dir.mkdir(QString("./recv_error_video_data"));
+
+    connect(ui->rf_controls_button,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_rf_control_button_clicked(bool)));
 
     connect(data_trans_f_inter.get(),
             SIGNAL(send_verification(QString)),
@@ -298,6 +306,19 @@ messenger_dialog::messenger_dialog(
 messenger_dialog::~messenger_dialog()
 {
     delete ui;
+}
+
+
+void messenger_dialog::on_rf_control_button_clicked(bool)
+{
+    if(rf_controls->isHidden())
+    {
+        rf_controls->show();
+    }
+    else
+    {
+        rf_controls->hide();
+    }
 }
 
 void messenger_dialog::radio_button_clicked(bool)

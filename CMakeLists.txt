@@ -114,7 +114,10 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/send_error_image_data_packet.cpp"
                       "./src/map_markup_post_interface.h"
                       "./src/map_markup_post.h"
-                      "./src/map_markup_post.cpp")
+                      "./src/map_markup_post.cpp"
+                      "./src/rf_controls_dialog.h"
+                      "./src/rf_controls_dialog.cpp"
+                      "./src/rf_controls_dialog.ui")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia map_scribble_widget_factory qwt speex speexdsp cameraWidget)
