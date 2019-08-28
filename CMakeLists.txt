@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 project(msg_util)
 
+SET(CMAKE_CXX_STANDARD 11)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -19,9 +21,33 @@ include_directories(
 
 link_directories( ../../libs/qwt/build/lib
                   ../../libs/speex-1.2
-                  ../../libs/speex-1.2/libspeex/.libs)
+                  ../../libs/speex-1.2/libspeex/.libs
+                  ../../r-op25/trunk-recorder/build/lib/op25_repeater/lib/imbe_vocoder)
 
 set(SOURCE_DIR ./src)
+
+SET(BOOST_REQUIRED_COMPONENTS
+    thread
+    system
+    program_options
+    filesystem
+    log_setup
+    log
+    regex
+    random
+)
+
+set(GR_REQUIRED_COMPONENTS ANALOG DIGITAL RUNTIME BLOCKS FILTER PMT)
+find_package(Gnuradio)
+find_package(GnuradioRuntime)
+find_package(CppUnit)
+
+if(NOT GNURADIO_RUNTIME_FOUND)
+    message(FATAL_ERROR "GnuRadio Runtime required to compile Trunk Recorder")
+endif()
+if(NOT CPPUNIT_FOUND)
+    message(FATAL_ERROR "CppUnit required to compile Trunk Recorder")
+endif()
 
 find_package(Marble CONFIG REQUIRED)
 find_package(Qt5Network CONFIG REQUIRED)
@@ -120,4 +146,4 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/rf_controls_dialog.ui")
                        
 add_executable(msg_util ${msg_util_SOURCES})
-target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia map_scribble_widget_factory qwt speex speexdsp cameraWidget)
+target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia map_scribble_widget_factory qwt speex speexdsp cameraWidget ssl crypto ${GNURADIO_PMT_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${GNURADIO_FILTER_LIBRARIES} ${GNURADIO_DIGITAL_LIBRARIES} ${GNURADIO_ANALOG_LIBRARIES} ${GNURADIO_AUDIO_LIBRARIES} ${GNURADIO_UHD_LIBRARIES} ${UHD_LIBRARIES} ${GNURADIO_BLOCKS_LIBRARIES} ${GROSMOSDR_LIBRARIES} ${Boost_LIBRARIES} ${LIBOP25_REPEATER_LIBRARIES} gnuradio-op25_repeater imbe_vocoder)
