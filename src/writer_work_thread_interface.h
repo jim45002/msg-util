@@ -19,6 +19,8 @@ public:
     virtual void run() = 0;
 
 signals:
+    void send_verification(QString);
+    void send_status(QString);
 
 public slots:
 

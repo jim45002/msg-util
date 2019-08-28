@@ -58,6 +58,8 @@ void reader_work_thread::ready_read()
         else
         {
             qDebug() << "timed out";
+            emit received_data_status("timed out");
+
         }
     }
 
@@ -109,6 +111,8 @@ void reader_work_thread::ready_read()
                              qDebug() << "completed data read - "
                                       << num_read;
 
+                             emit received_data_status("completed data read");
+
                              qDebug() << "reading idetifier";
                              identifer = socket->read(identifer_size);
                              if(identifer.size() != identifer_size)
@@ -117,6 +121,8 @@ void reader_work_thread::ready_read()
                                           << identifer_size
                                           << " identifier.size() == "
                                           << identifer.size();
+                                 emit received_data_status("error reading identifer");
+
                              }
                              break;
                          }
@@ -132,11 +138,14 @@ void reader_work_thread::ready_read()
                       else
                       {
                          qDebug() << "error occured while reading socket";
+                         emit received_data_status("error occured while reading socket");
+
                       }
                    }
                    else
                    {
                       qDebug() << "waiting for ready read, " << num_read;
+                      emit received_data_status("waiting for ready read");
                       socket->waitForReadyRead(3000);
                    }
 

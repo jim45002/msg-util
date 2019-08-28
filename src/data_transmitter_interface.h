@@ -20,8 +20,12 @@ signals:
     void send_completed(QString);
     void connection_status_update(QString);
     void received_verification(QString);
+    void send_verification(QString);
 
 public slots:
+    virtual void connected_to_host_completed() = 0;
+    virtual void on_send_verification(QString) = 0;
+    virtual void on_send_status(QString) = 0;
 
 private:
 

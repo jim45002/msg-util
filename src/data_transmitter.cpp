@@ -50,6 +50,12 @@ data_transmitter::find_worker_thread()
       if(!iter->isRunning())
       {
           r = iter;
+          connect(r.get(),SIGNAL(send_verification(QString)),
+                  this,
+                  SLOT(on_send_verification(QString)));
+          connect(r.get(),SIGNAL(send_status(QString)),
+                  this,
+                  SLOT(on_send_status(QString)));
           break;
       }
   }
@@ -72,4 +78,14 @@ void data_transmitter::connected_to_host_completed()
         qDebug() << "no threads available";
         tcp_socket->close();
     }
+}
+
+void data_transmitter::on_send_verification(QString msg)
+{
+   emit send_verification(msg);
+}
+
+void data_transmitter::on_send_status(QString msg)
+{
+   emit send_completed(msg);
 }

@@ -96,6 +96,16 @@ messenger_dialog::messenger_dialog(
     dir.mkdir(QString("./recv_error_image_data"));
     dir.mkdir(QString("./recv_error_video_data"));
 
+    connect(data_trans_f_inter.get(),
+            SIGNAL(send_verification(QString)),
+            this,
+            SLOT(on_send_verification(QString)));
+
+    connect(data_trans_f_inter.get(),
+            SIGNAL(send_completed(QString)),
+            this,
+            SLOT(on_send_completed(QString)));
+
     connect(data_recv_inter,
             SIGNAL(received_data_status(QString)),
             this,
@@ -314,6 +324,16 @@ void messenger_dialog::radio_button_clicked(bool)
 }
 
 void messenger_dialog::on_recv_data_error(QString)
+{
+
+}
+
+void messenger_dialog::on_send_verification(QString)
+{
+
+}
+
+void messenger_dialog::on_send_completed(QString)
 {
 
 }

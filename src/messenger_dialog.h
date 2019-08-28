@@ -72,6 +72,8 @@ public slots:
     void freq_slider_moved(int val);
     void radio_button_clicked(bool);
     void on_recv_data_error(QString);
+    void on_send_verification(QString);
+    void on_send_completed(QString);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;

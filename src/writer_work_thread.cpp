@@ -151,12 +151,14 @@ bool writer_work_thread::send_packet_data(QByteArray& bytes)
                    if(num_written==bytes.size())
                    {
                        qDebug() << "completed data write";
+                       emit send_status("completed");
                        break;
                    }
                    else
                    if(num_written>bytes.size())
                    {
                        qDebug() << "num bytes written > buff size";
+                       emit send_status("num bytes written > buff size");
                        result = false;
                        break;
                    }
@@ -165,11 +167,13 @@ bool writer_work_thread::send_packet_data(QByteArray& bytes)
            else
            {
                qDebug() << "error occured while sending data";
+               emit send_status("error occured while sending data");
                result = false;
            }
           if(tries>32)
            {
                qDebug() << "max send attempts";
+               emit send_status("max send attempts");
                result = false;
                break;
            }
@@ -178,6 +182,7 @@ bool writer_work_thread::send_packet_data(QByteArray& bytes)
     else
     {
         result = false;
+        emit send_status("zero bytes received");
     }
 
     return result;
@@ -215,6 +220,7 @@ void writer_work_thread::ready_write()
                    if(f.copy("./unverified_image_data/"+file))
                    {
                        f.remove();
+                       emit send_status("waiting for peer verification");
                    }
                    else
                    {
@@ -229,6 +235,7 @@ void writer_work_thread::ready_write()
             else
             {
                 qDebug() << "unable to open file " << f.fileName();
+                emit send_status( "unable to open file " +  f.fileName());
             }
         }
     };
@@ -261,6 +268,8 @@ void writer_work_thread::ready_write()
                         if(f.copy("./unverified_map_markup_data/"+file))
                         {
                             f.remove();
+                            emit send_status( "waiting for received verification on " +  f.fileName());
+
                         }
                         else
                         {

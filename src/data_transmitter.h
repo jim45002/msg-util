@@ -21,7 +21,9 @@ public:
     <writer_work_thread_interface> find_worker_thread();
 
 public slots:
-    void connected_to_host_completed();
+    virtual void connected_to_host_completed();
+    virtual void on_send_verification(QString);
+    virtual void on_send_status(QString);
 
 private:
     QList<std::shared_ptr
