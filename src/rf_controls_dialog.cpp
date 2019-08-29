@@ -8,7 +8,7 @@
 #include <qpen.h>
 #include <qevent.h>
 #include <qwt_plot.h>
-
+#include "frequencydisplayplot.h"
 #include "rf_controls_dialog.h"
 #include "ui_rf_controls_dialog.h"
 
@@ -95,23 +95,23 @@ rf_controls_dialog::rf_controls_dialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QwtPlot* plot = new QwtPlot(parent);
-    plot->setAxisScale( QwtPlot::yLeft, -128,128 );
-    plot->setAxisScale( QwtPlot::xBottom, 0.0, 128);
-    plot->setFont(QFont("New Times Roman",11));
-    plot->setAxisTitle(QwtPlot::xBottom,QString("Frequency"));
-    plot->setAxisScale(QwtPlot::xBottom,-3000,3000);
-    plot->setAxisScale(QwtPlot::yLeft,0,256);
+    freq_plot = new FrequencyDisplayPlot(1,this);
+    freq_plot->setAxisScale( QwtPlot::yLeft, -128,128 );
+    freq_plot->setAxisScale( QwtPlot::xBottom, 0.0, 128);
+    freq_plot->setFont(QFont("New Times Roman",11));
+    freq_plot->setAxisTitle(QwtPlot::xBottom,QString("Frequency"));
+    freq_plot->setAxisScale(QwtPlot::xBottom,-3000,3000);
+    freq_plot->setAxisScale(QwtPlot::yLeft,0,256);
     QVBoxLayout *layout = new QVBoxLayout( this );
     parent->setLayout(layout);
-    layout->addWidget(plot);
-    plot->show();
+    layout->addWidget(freq_plot);
+    freq_plot->show();
 
     QWidget* w = new QWidget(this);
     QHBoxLayout *widget_layout = new QHBoxLayout( w );
     w->setLayout(widget_layout);
 
-    d_knbVolume = new Knob( "Volume", 0.0, 10.0, this );
+    d_knbVolume = new Knob( "Gain", 0.0, 10.0, this );
     d_knbFreq = new Knob( "Frequency", 300.0, 3000.0, this );
     d_knbSquelch = new Knob( "Squelch", -10.0, 10.0, this );
 

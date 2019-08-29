@@ -7,6 +7,7 @@ namespace Ui {
 class rf_controls_dialog;
 }
 
+class FrequencyDisplayPlot;
 class QwtPlot;;
 class Knob;
 
@@ -24,6 +25,7 @@ private:
     Knob *d_knbFreq;
     Knob *d_knbSquelch;
     QwtPlot* qwt_plot;
+    FrequencyDisplayPlot* freq_plot;
 };
 
 #endif // RF_CONTROLS_DIALOG_H

@@ -14,6 +14,7 @@ class QFile;
 class QListWidget;
 class QTimer;
 class QGraphicsScene;
+class QListWidgetItem;
 
 class camera_device_interface;
 class camera_widget_interface;
@@ -77,6 +78,8 @@ public slots:
     void on_send_verification(QString);
     void on_send_completed(QString);
     void on_rf_control_button_clicked(bool);
+    void on_show_views_clicked(bool);
+    void on_view_list_clicked(QListWidgetItem *);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;
@@ -89,6 +92,7 @@ private:
     QList<QGraphicsScene*> graphics_scene_list;
     std::shared_ptr<map_widget_interface> mwfi;
     std::shared_ptr<map_widget_interface> streams_mwfi;
+    std::shared_ptr<map_widget_interface>  large_mwfi;
     std::shared_ptr<audio_buffer_device> audio_buffer;
     std::shared_ptr<audio_buffer_device> incoming_audio_buffer;
     std::shared_ptr<audio_file_player_thread> aud_file_player_thread;

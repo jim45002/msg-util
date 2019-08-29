@@ -17,6 +17,7 @@
 #include <QUrl>
 #include <QDebug>
 #include <QDir>
+#include <QListWidgetItem>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -53,6 +54,8 @@ messenger_dialog::messenger_dialog(
 
 {
     ui->setupUi(this);
+
+    ui->stackedWidget->setCurrentIndex(1);
 
     rf_controls = new rf_controls_dialog(this);
 
@@ -224,6 +227,16 @@ messenger_dialog::messenger_dialog(
             this,
             SLOT(freq_slider_moved(int)));
 
+    connect(ui->show_views_checkbox,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_show_views_clicked(bool)));
+
+    connect(ui->views_list,
+            SIGNAL(itemClicked(QListWidgetItem*)),
+            this,
+            SLOT(on_view_list_clicked(QListWidgetItem*)));
+
     ui->freq_spinBox->setSingleStep(1000000);
     ui->freq_spinBox->setMaximum(2000000000);
     ui->freq_spinBox->setMinimum(300000000);
@@ -264,6 +277,12 @@ messenger_dialog::messenger_dialog(
     auto l2 = new QHBoxLayout;
     ui->streams_map_widget->setLayout(l2);
     l2->addWidget(streams_mwfi->map_dispaly_widget());
+
+    large_mwfi = map_widget_factory::create(this);
+    large_mwfi->map_enable_scibble(false);
+    auto l3 = new QHBoxLayout;
+    ui->large_map_markup_widget->setLayout(l3);
+    l3->addWidget(large_mwfi->map_dispaly_widget());
 
     audio_buffer =
             std::make_shared<audio_buffer_device>(outgoing_plot,
@@ -308,6 +327,64 @@ messenger_dialog::~messenger_dialog()
     delete ui;
 }
 
+void messenger_dialog::on_view_list_clicked(QListWidgetItem* iw)
+{
+    qDebug() << "void messenger_dialog::on_view_list_clicked(QListWidgetItem* iw) "
+             << iw->text() ;
+   QString item = iw->text();
+   if(item=="desktop")
+   {
+       ui->stackedWidget->setCurrentIndex(0);
+   }
+   else
+   {
+       if(item == "Msg-Util")
+       {
+           ui->stackedWidget->setCurrentIndex(1);
+       }
+       else
+       {
+           if(item == "Configuration")
+           {
+               ui->stackedWidget->setCurrentIndex(2);
+           }
+           else
+           {
+               if(item == "Cam-Streams")
+               {
+                   ui->stackedWidget->setCurrentIndex(3);
+               }
+               else
+               {
+                   if(item == "Detection")
+                   {
+                       ui->stackedWidget->setCurrentIndex(4);
+                   }
+                   else
+                   {
+                       if(item == "Map-Markup")
+                       {
+                           ui->stackedWidget->setCurrentIndex(5);
+                       }
+                   }
+               }
+           }
+       }
+   }
+}
+
+
+void messenger_dialog::on_show_views_clicked(bool)
+{
+    if(ui->show_views_checkbox->isChecked())
+    {
+        ui->views_groupBox->show();
+    }
+    else
+    {
+        ui->views_groupBox->hide();
+    }
+}
 
 void messenger_dialog::on_rf_control_button_clicked(bool)
 {
