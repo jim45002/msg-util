@@ -59,7 +59,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>5</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="desktop">
          <layout class="QVBoxLayout" name="verticalLayout_29">
@@ -129,7 +129,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>865</width>
+                  <width>949</width>
                   <height>1314</height>
                  </rect>
                 </property>
@@ -2175,7 +2175,7 @@ color: rgb(24, 24, 24);</string>
                        </widget>
                       </item>
                       <item>
-                       <widget class="QRadioButton" name="radioButton">
+                       <widget class="QRadioButton" name="radio_button_op25">
                         <property name="styleSheet">
                          <string notr="true">color: rgb(255, 255, 255);</string>
                         </property>
@@ -3936,7 +3936,7 @@ color: rgb(24, 24, 24);</string>
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>88</width>
+                     <width>98</width>
                      <height>104</height>
                     </rect>
                    </property>
@@ -4010,7 +4010,7 @@ color: rgb(24, 24, 24);</string>
                  <number>1</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButton_3">
+                 <widget class="QPushButton" name="map_markup_page_transmit_button">
                   <property name="text">
                    <string>Tansmit Scribble</string>
                   </property>
@@ -4030,7 +4030,7 @@ color: rgb(24, 24, 24);</string>
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_2">
+                 <widget class="QCheckBox" name="map_markup_page_enable_scribble_checkbox">
                   <property name="text">
                    <string>Enable Scribble</string>
                   </property>

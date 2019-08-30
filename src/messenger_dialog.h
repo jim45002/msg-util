@@ -80,6 +80,9 @@ public slots:
     void on_rf_control_button_clicked(bool);
     void on_show_views_clicked(bool);
     void on_view_list_clicked(QListWidgetItem *);
+    void on_map_markup_page_enable_scribble_checkbox(bool);
+    void on_map_markup_page_transmit_button(bool b);
+    void on_radio_button_op25(bool);
 private:
     unsigned short int current_graphics_scene_index;
     Ui::messenger_dialog *ui;

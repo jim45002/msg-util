@@ -258,7 +258,7 @@ void map_paint_layer::mousePressEvent(QMouseEvent *event)
         if (event->button() == Qt::RightButton)
         {
             last_right_click_point = event->pos();
-            map_layer_menu->exec(event->pos());
+            map_layer_menu->exec(mapToGlobal(event->pos()));
         }
     }
 }

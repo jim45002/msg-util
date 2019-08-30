@@ -148,7 +148,10 @@ set(msg_util_SOURCES "./src/main.cpp"
                       "./src/frequencydisplayplot.h"
                       "./src/frequencydisplayplot.cpp"
                       "./src/displayplot.h"
-                      "./src/displayplot.cpp")
+                      "./src/displayplot.cpp"
+                      "./src/receiver_op25.h"
+                      "./src/receiver_op25.cpp"
+                      "./src/receiver_op25_interface.h")
                        
 add_executable(msg_util ${msg_util_SOURCES})
 target_link_libraries(msg_util Qt5::Core Qt5::Network Qt5::Gui Qt5::Widgets Qt5::Multimedia map_scribble_widget_factory qwt speex speexdsp cameraWidget ssl crypto gnuradio-blocks gnuradio-qtgui ${GNURADIO_PMT_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES} ${GNURADIO_FILTER_LIBRARIES} ${GNURADIO_DIGITAL_LIBRARIES} ${GNURADIO_ANALOG_LIBRARIES} ${GNURADIO_AUDIO_LIBRARIES} ${GNURADIO_UHD_LIBRARIES} ${UHD_LIBRARIES} ${GNURADIO_BLOCKS_LIBRARIES} ${GROSMOSDR_LIBRARIES} ${Boost_LIBRARIES} ${LIBOP25_REPEATER_LIBRARIES} gnuradio-osmosdr gnuradio-op25_repeater imbe_vocoder)

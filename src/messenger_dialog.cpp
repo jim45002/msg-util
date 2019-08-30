@@ -237,6 +237,21 @@ messenger_dialog::messenger_dialog(
             this,
             SLOT(on_view_list_clicked(QListWidgetItem*)));
 
+    connect(ui->map_markup_page_enable_scribble_checkbox,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_map_markup_page_enable_scribble_checkbox(bool)));
+
+    connect(ui->map_markup_page_transmit_button,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_map_markup_page_transmit_button(bool)));
+
+    connect(ui->radio_button_op25,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(on_radio_button_p25(bool)));
+
     ui->freq_spinBox->setSingleStep(1000000);
     ui->freq_spinBox->setMaximum(2000000000);
     ui->freq_spinBox->setMinimum(300000000);
@@ -327,6 +342,29 @@ messenger_dialog::~messenger_dialog()
     delete ui;
 }
 
+void messenger_dialog::on_radio_button_op25(bool b)
+{
+
+}
+
+void messenger_dialog::on_map_markup_page_enable_scribble_checkbox(bool)
+{
+ qDebug() <<
+ "void messenger_dialog::on_map_markup_page_enable_scribble_checkbox(bool)";
+    if(ui->map_markup_page_enable_scribble_checkbox->isChecked())
+    {
+        large_mwfi->map_enable_scibble(true);
+        qDebug() <<
+        "void messenger_dialog::on_map_markup_page_enable_scribble_checkbox(bool) true";
+    }
+    else
+    {
+        large_mwfi->map_enable_scibble(false);
+        qDebug() <<
+        "void messenger_dialog::on_map_markup_page_enable_scribble_checkbox(bool) false";
+    }
+}
+
 void messenger_dialog::on_view_list_clicked(QListWidgetItem* iw)
 {
     qDebug() << "void messenger_dialog::on_view_list_clicked(QListWidgetItem* iw) "
@@ -373,6 +411,10 @@ void messenger_dialog::on_view_list_clicked(QListWidgetItem* iw)
    }
 }
 
+void messenger_dialog::on_map_markup_page_transmit_button(bool b)
+{
+    transmit_sribble_clicked( b );
+}
 
 void messenger_dialog::on_show_views_clicked(bool)
 {
